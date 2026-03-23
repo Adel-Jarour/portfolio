@@ -1,0 +1,126 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:portfolio/core/constants/app_colors.dart';
+import 'package:portfolio/core/constants/app_sizes.dart';
+import 'package:portfolio/core/constants/app_text_styles.dart';
+import 'package:portfolio/modules/skills_section/widgets/skill_card.dart';
+
+class SkillsSection extends StatelessWidget {
+  const SkillsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth <= AppSizes.mobileBreakpoint;
+    final isTablet = screenWidth <= AppSizes.tabletBreakpoint && !isMobile;
+
+    final cards = [
+      SkillCard(
+        icon: Icons.code,
+        title: 'skill_frontend'.tr,
+        tags: const [
+          'React.js',
+          'Next.js',
+          'TailwindCSS',
+          'TypeScript',
+          'Framer Motion',
+        ],
+      ),
+      SkillCard(
+        icon: Icons.storage_rounded,
+        title: 'skill_backend'.tr,
+        tags: const [
+          'Node.js',
+          'PostgreSQL',
+          'GraphQL',
+          'Firebase',
+          'Prisma',
+        ],
+      ),
+      SkillCard(
+        icon: Icons.draw_outlined,
+        title: 'skill_design'.tr,
+        tags: const [
+          'Figma',
+          'UI/UX Design',
+          'Prototyping',
+          'Adobe CC',
+          'Design Systems',
+        ],
+      ),
+    ];
+
+    return Container(
+      width: double.infinity,
+      color: AppColors.background, // Light gray/off-white bg
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile
+            ? AppSizes.pagePaddingMobile
+            : isTablet
+                ? AppSizes.pagePaddingTablet
+                : AppSizes.pagePaddingDesktop,
+        vertical: AppSizes.xxxl + 20,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: AppSizes.maxContentWidth),
+          child: Column(
+            children: [
+              // Header
+              Column(
+                children: [
+                  Text(
+                    'skills_title'.tr,
+                    style: AppTextStyles.h2.copyWith(
+                      fontSize: isMobile ? 32 : 40,
+                      fontWeight: FontWeight.w800,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: AppSizes.sm),
+                  Text(
+                    'skills_subtitle'.tr,
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSizes.xxl + 20),
+
+              // Cards Grid/List
+              if (isMobile)
+                Column(
+                  children: List.generate(
+                    cards.length,
+                    (index) => Padding(
+                      padding: EdgeInsets.only(
+                        bottom: index < cards.length - 1 ? AppSizes.lg : 0,
+                      ),
+                      child: cards[index],
+                    ),
+                  ),
+                )
+              else
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: List.generate(
+                    cards.length,
+                    (index) => Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          right: index < cards.length - 1 ? AppSizes.xl : 0,
+                        ),
+                        child: cards[index],
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
