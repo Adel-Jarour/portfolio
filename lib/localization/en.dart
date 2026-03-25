@@ -69,6 +69,32 @@ const Map<String, String> en = {
   Strings.project2Desc:
       'High-performance e-commerce experience with headless CMS integration and custom animations.',
 
+  // Contact Section
+  Strings.contactTitle: 'Let\'s work together.',
+  Strings.contactSubtitle:
+      'Have a project in mind? Looking to hire? Or just want to say hi? I\'m always open to discussing new opportunities and creative collaborations.',
+  Strings.emailMe: 'EMAIL ME',
+  Strings.emailAddress: 'hello@yourportfolio.com',
+  Strings.location: 'LOCATION',
+  Strings.locationAddress: 'San Francisco, CA',
+  Strings.downloadResume: 'Download Resume',
+  Strings.fullName: 'Full Name',
+  Strings.fullNameHint: 'John Doe',
+  Strings.emailLabel: 'Email Address',
+  Strings.emailHint: 'john@example.com',
+  Strings.subject: 'Subject',
+  Strings.subjectHint: 'How can I help you?',
+  Strings.message: 'Message',
+  Strings.messageHint: 'Your message here...',
+  Strings.sendMessage: 'Send Message',
+
+  // Footer Section
+  Strings.privacyPolicy: 'Privacy Policy',
+  Strings.termsOfService: 'Terms of Service',
+  Strings.latestWork: 'Latest Work',
+  Strings.contact: 'Contact',
+  Strings.footerCopyright: '© 2024 Portfolio. Built with precision and passion.',
+
   // General
   Strings.portfolio: 'Portfolio',
 };

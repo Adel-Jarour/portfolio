@@ -58,6 +58,31 @@ class Strings {
   static const String project2Title = 'project2_title';
   static const String project2Desc = 'project2_desc';
 
+  // Contact Section
+  static const String contactTitle = 'contact_title';
+  static const String contactSubtitle = 'contact_subtitle';
+  static const String emailMe = 'email_me';
+  static const String emailAddress = 'email_address';
+  static const String location = 'location';
+  static const String locationAddress = 'location_address';
+  static const String downloadResume = 'download_resume';
+  static const String fullName = 'full_name';
+  static const String fullNameHint = 'full_name_hint';
+  static const String emailLabel = 'email_label';
+  static const String emailHint = 'email_hint';
+  static const String subject = 'subject';
+  static const String subjectHint = 'subject_hint';
+  static const String message = 'message';
+  static const String messageHint = 'message_hint';
+  static const String sendMessage = 'send_message';
+
+  // Footer Section
+  static const String privacyPolicy = 'privacy_policy';
+  static const String termsOfService = 'terms_of_service';
+  static const String latestWork = 'latest_work';
+  static const String contact = 'contact';
+  static const String footerCopyright = 'footer_copyright';
+
   // General
   static const String portfolio = 'portfolio';
 }

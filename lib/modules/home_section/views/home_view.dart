@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/modules/contact_section/views/contact_section.dart';
+import 'package:portfolio/modules/footer/views/footer_view.dart';
 import 'package:portfolio/modules/navbar/views/navbar_view.dart';
 import 'package:portfolio/modules/navbar/widgets/nav_drawer.dart';
 import 'package:portfolio/modules/home_section/widgets/hero_section.dart';
@@ -27,6 +29,8 @@ class HomeView extends StatelessWidget {
                   AboutSection(),
                   SkillsSection(),
                   ProjectsSection(),
+                  ContactSection(),
+                  FooterView(),
                   // Future sections will be added here
                 ],
               ),

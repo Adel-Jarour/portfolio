@@ -67,6 +67,32 @@ const Map<String, String> ar = {
   Strings.project2Desc:
       'تجربة تجارة إلكترونية عالية الأداء مع تكامل نظام إدارة محتوى بدون رأس ورسوم متحركة مخصصة.',
 
+  // Contact Section
+  Strings.contactTitle: 'دعنا نعمل معًا.',
+  Strings.contactSubtitle:
+      'هل لديك مشروع في ذهنك؟ تبحث عن توظيف؟ أو فقط تريد إلقاء التحية؟ أنا دائمًا منفتح لمناقشة الفرص الجديدة والتعاون الإبداعي.',
+  Strings.emailMe: 'راسلني',
+  Strings.emailAddress: 'hello@yourportfolio.com',
+  Strings.location: 'الموقع',
+  Strings.locationAddress: 'سان فرانسيسكو، كاليفورنيا',
+  Strings.downloadResume: 'تحميل السيرة الذاتية',
+  Strings.fullName: 'الاسم الكامل',
+  Strings.fullNameHint: 'جون دو',
+  Strings.emailLabel: 'البريد الإلكتروني',
+  Strings.emailHint: 'john@example.com',
+  Strings.subject: 'الموضوع',
+  Strings.subjectHint: 'كيف يمكنني مساعدتك؟',
+  Strings.message: 'الرسالة',
+  Strings.messageHint: 'رسالتك هنا...',
+  Strings.sendMessage: 'إرسال الرسالة',
+
+  // Footer Section
+  Strings.privacyPolicy: 'سياسة الخصوصية',
+  Strings.termsOfService: 'شروط الخدمة',
+  Strings.latestWork: 'أحدث الأعمال',
+  Strings.contact: 'اتصل بنا',
+  Strings.footerCopyright: '© 2024 بورتفوليو. صُنع بدقة وشغف.',
+
   // General
   Strings.portfolio: 'بورتفوليو',
 };
