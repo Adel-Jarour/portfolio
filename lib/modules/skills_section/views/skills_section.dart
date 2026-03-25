@@ -49,10 +49,9 @@ class SkillsSection extends StatelessWidget {
         ],
       ),
     ];
-
     return Container(
       width: double.infinity,
-      color: AppColors.background, // Light gray/off-white bg
+      color: AppColors.background,
       padding: EdgeInsets.symmetric(
         horizontal: isMobile
             ? AppSizes.pagePaddingMobile
@@ -62,63 +61,57 @@ class SkillsSection extends StatelessWidget {
         vertical: AppSizes.xxxl + 20,
       ),
       child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: AppSizes.maxContentWidth),
-          child: Column(
-            children: [
-              // Header
+        child: Column(
+          children: [
+            Column(
+              children: [
+                Text(
+                  'skills_title'.tr,
+                  style: AppTextStyles.h2.copyWith(
+                    fontSize: isMobile ? 32 : 40,
+                    fontWeight: FontWeight.w800,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppSizes.sm),
+                Text(
+                  'skills_subtitle'.tr,
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSizes.xxl + 20),
+            if (isMobile)
               Column(
-                children: [
-                  Text(
-                    'skills_title'.tr,
-                    style: AppTextStyles.h2.copyWith(
-                      fontSize: isMobile ? 32 : 40,
-                      fontWeight: FontWeight.w800,
+                children: List.generate(
+                  cards.length,
+                  (index) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: index < cards.length - 1 ? AppSizes.lg : 0,
                     ),
-                    textAlign: TextAlign.center,
+                    child: cards[index],
                   ),
-                  const SizedBox(height: AppSizes.sm),
-                  Text(
-                    'skills_subtitle'.tr,
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppSizes.xxl + 20),
-
-              // Cards Grid/List
-              if (isMobile)
-                Column(
-                  children: List.generate(
-                    cards.length,
-                    (index) => Padding(
+                ),
+              )
+            else
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(
+                  cards.length,
+                  (index) => Expanded(
+                    child: Padding(
                       padding: EdgeInsets.only(
-                        bottom: index < cards.length - 1 ? AppSizes.lg : 0,
+                        right: index < cards.length - 1 ? AppSizes.xl : 0,
                       ),
                       child: cards[index],
                     ),
                   ),
-                )
-              else
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: List.generate(
-                    cards.length,
-                    (index) => Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          right: index < cards.length - 1 ? AppSizes.xl : 0,
-                        ),
-                        child: cards[index],
-                      ),
-                    ),
-                  ),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ),
     );

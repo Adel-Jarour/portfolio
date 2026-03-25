@@ -49,7 +49,6 @@ class SkillCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSizes.lg),
-          // Title
           Text(
             title,
             style: AppTextStyles.h4.copyWith(
@@ -58,7 +57,6 @@ class SkillCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSizes.lg),
-          // Tags Wrap
           Wrap(
             spacing: AppSizes.sm,
             runSpacing: AppSizes.sm,
