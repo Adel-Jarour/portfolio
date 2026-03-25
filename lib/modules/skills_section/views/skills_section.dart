@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
+import 'package:portfolio/localization/strings.dart';
 import 'package:portfolio/modules/skills_section/widgets/skill_card.dart';
 
 class SkillsSection extends StatelessWidget {
@@ -17,7 +18,7 @@ class SkillsSection extends StatelessWidget {
     final cards = [
       SkillCard(
         icon: Icons.code,
-        title: 'skill_frontend'.tr,
+        title: Strings.skillFrontend.tr,
         tags: const [
           'React.js',
           'Next.js',
@@ -28,7 +29,7 @@ class SkillsSection extends StatelessWidget {
       ),
       SkillCard(
         icon: Icons.storage_rounded,
-        title: 'skill_backend'.tr,
+        title: Strings.skillBackend.tr,
         tags: const [
           'Node.js',
           'PostgreSQL',
@@ -39,7 +40,7 @@ class SkillsSection extends StatelessWidget {
       ),
       SkillCard(
         icon: Icons.draw_outlined,
-        title: 'skill_design'.tr,
+        title: Strings.skillDesign.tr,
         tags: const [
           'Figma',
           'UI/UX Design',
@@ -66,7 +67,7 @@ class SkillsSection extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  'skills_title'.tr,
+                  Strings.skillsTitle.tr,
                   style: AppTextStyles.h2.copyWith(
                     fontSize: isMobile ? 32 : 40,
                     fontWeight: FontWeight.w800,
@@ -75,7 +76,7 @@ class SkillsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSizes.sm),
                 Text(
-                  'skills_subtitle'.tr,
+                  Strings.skillsSubtitle.tr,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.textSecondary,
                   ),

@@ -5,6 +5,7 @@ import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/widgets/custom_button.dart';
 import 'package:portfolio/core/controllers/app_controller.dart';
+import 'package:portfolio/localization/strings.dart';
 import 'package:portfolio/modules/navbar/widgets/nav_link_item.dart';
 
 class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
@@ -71,7 +72,7 @@ class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
             ),
             const SizedBox(width: AppSizes.md),
             CustomButton(
-              text: 'hire_me'.tr,
+              text: Strings.hireMe.tr,
               variant: CustomButtonVariant.filled,
               onPressed: () {},
             ),

@@ -4,6 +4,7 @@ import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/widgets/custom_button.dart';
+import 'package:portfolio/localization/strings.dart';
 import 'package:portfolio/core/controllers/app_controller.dart';
 
 class NavDrawer extends GetView<AppController> {
@@ -41,7 +42,7 @@ class NavDrawer extends GetView<AppController> {
                   ),
                   const SizedBox(width: AppSizes.sm),
                   Text(
-                    'portfolio'.tr,
+                    Strings.portfolio.tr,
                     style: AppTextStyles.h4,
                   ),
                   const Spacer(),
@@ -94,7 +95,7 @@ class NavDrawer extends GetView<AppController> {
               child: SizedBox(
                 width: double.infinity,
                 child: CustomButton(
-                  text: 'hire_me'.tr,
+                  text: Strings.hireMe.tr,
                   variant: CustomButtonVariant.filled,
                   onPressed: () {},
                 ),

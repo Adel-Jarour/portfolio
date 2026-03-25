@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
+import 'package:portfolio/localization/strings.dart';
 
 class ExperienceTimeline extends StatelessWidget {
   const ExperienceTimeline({super.key});
@@ -12,21 +13,21 @@ class ExperienceTimeline extends StatelessWidget {
     final items = [
       _ExperienceData(
         icon: Icons.design_services_outlined,
-        titleKey: 'exp1_title',
-        companyKey: 'exp1_company',
-        descKey: 'exp1_desc',
+        titleKey: Strings.exp1Title,
+        companyKey: Strings.exp1Company,
+        descKey: Strings.exp1Desc,
       ),
       _ExperienceData(
         icon: Icons.code_rounded,
-        titleKey: 'exp2_title',
-        companyKey: 'exp2_company',
-        descKey: 'exp2_desc',
+        titleKey: Strings.exp2Title,
+        companyKey: Strings.exp2Company,
+        descKey: Strings.exp2Desc,
       ),
       _ExperienceData(
         icon: Icons.school_outlined,
-        titleKey: 'exp3_title',
-        companyKey: 'exp3_company',
-        descKey: 'exp3_desc',
+        titleKey: Strings.exp3Title,
+        companyKey: Strings.exp3Company,
+        descKey: Strings.exp3Desc,
       ),
     ];
 

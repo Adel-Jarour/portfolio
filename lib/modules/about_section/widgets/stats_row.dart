@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
+import 'package:portfolio/localization/strings.dart';
 
 class StatsRow extends StatelessWidget {
   const StatsRow({super.key});
@@ -10,9 +11,9 @@ class StatsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stats = [
-      _StatData(valueKey: 'stat_projects_value', labelKey: 'stat_projects'),
-      _StatData(valueKey: 'stat_clients_value', labelKey: 'stat_clients'),
-      _StatData(valueKey: 'stat_experience_value', labelKey: 'stat_experience'),
+      _StatData(valueKey: Strings.statProjectsValue, labelKey: Strings.statProjects),
+      _StatData(valueKey: Strings.statClientsValue, labelKey: Strings.statClients),
+      _StatData(valueKey: Strings.statExperienceValue, labelKey: Strings.statExperience),
     ];
 
     return Row(

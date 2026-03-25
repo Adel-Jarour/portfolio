@@ -5,6 +5,7 @@ import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/modules/about_section/widgets/experience_timeline.dart';
 import 'package:portfolio/modules/about_section/widgets/stats_row.dart';
+import 'package:portfolio/localization/strings.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
@@ -33,7 +34,7 @@ class AboutSection extends StatelessWidget {
             children: [
               // Section title
               Text(
-                'about_me'.tr,
+                Strings.aboutMe.tr,
                 style: AppTextStyles.h2.copyWith(
                   fontSize: isMobile ? 28 : 36,
                 ),
@@ -86,7 +87,7 @@ class AboutSection extends StatelessWidget {
       children: [
         // Paragraph 1
         Text(
-          'about_p1'.tr,
+          Strings.aboutP1.tr,
           style: AppTextStyles.bodyMedium.copyWith(
             height: 1.8,
           ),
@@ -95,7 +96,7 @@ class AboutSection extends StatelessWidget {
 
         // Paragraph 2
         Text(
-          'about_p2'.tr,
+          Strings.aboutP2.tr,
           style: AppTextStyles.bodyMedium.copyWith(
             height: 1.8,
           ),

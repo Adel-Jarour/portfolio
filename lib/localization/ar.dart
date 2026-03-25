@@ -1,55 +1,57 @@
+import 'strings.dart';
+
 const Map<String, String> ar = {
   // Navbar
-  'nav_home': 'الرئيسية',
-  'nav_about': 'حول',
-  'nav_skills': 'المهارات',
-  'nav_projects': 'المشاريع',
-  'nav_contact': 'تواصل',
-  'hire_me': 'وظفني',
+  Strings.navHome: 'الرئيسية',
+  Strings.navAbout: 'حول',
+  Strings.navSkills: 'المهارات',
+  Strings.navProjects: 'المشاريع',
+  Strings.navContact: 'تواصل',
+  Strings.hireMe: 'وظفني',
 
   // Home Section
-  'available_for_projects': 'متاح للمشاريع',
-  'hero_title_1': 'صناعة ',
-  'hero_title_highlight': 'تجارب',
-  'hero_title_2': '\nرقمية\nبدقة عالية',
-  'hero_subtitle':
+  Strings.availableForProjects: 'متاح للمشاريع',
+  Strings.heroTitle1: 'صناعة ',
+  Strings.heroTitleHighlight: 'تجارب',
+  Strings.heroTitle2: '\nرقمية\nبدقة عالية',
+  Strings.heroSubtitle:
       'مطور متكامل ومصمم واجهات مستخدم متخصص في حلول الويب عالية الدقة التي تدفع نمو الأعمال وتفاعل المستخدمين.',
-  'view_portfolio': 'عرض الأعمال',
-  'professional_profile': 'الملف المهني',
+  Strings.viewPortfolio: 'عرض الأعمال',
+  Strings.professionalProfile: 'الملف المهني',
 
   // About Section
-  'about_me': 'نبذة عني',
-  'about_p1':
+  Strings.aboutMe: 'نبذة عني',
+  Strings.aboutP1:
       'أنا مبدع شغوف أركز على بناء تطبيقات أنيقة تركز على المستخدم باستخدام التقنيات الحديثة ونهج تصميم يركز على الإنسان. مع أكثر من 6 سنوات من الخبرة في صناعة التكنولوجيا، قمت بسد الفجوة بين الهندسة المعقدة والتصميم الجمالي.',
-  'about_p2':
+  Strings.aboutP2:
       'بدأت رحلتي في التصميم الجرافيكي، مما قادني في النهاية إلى تطوير الواجهات الأمامية حيث وجدت شغفي الحقيقي في بناء تجارب ويب تفاعلية.',
-  'stat_projects': 'مشاريع منجزة',
-  'stat_clients': 'عملاء سعداء',
-  'stat_experience': 'سنوات خبرة',
-  'stat_projects_value': '+50',
-  'stat_clients_value': '+12',
-  'stat_experience_value': '+6',
+  Strings.statProjects: 'مشاريع منجزة',
+  Strings.statClients: 'عملاء سعداء',
+  Strings.statExperience: 'سنوات خبرة',
+  Strings.statProjectsValue: '+50',
+  Strings.statClientsValue: '+12',
+  Strings.statExperienceValue: '+6',
 
   // Experience items
-  'exp1_title': 'مصمم منتجات أول',
-  'exp1_company': 'تك كورب | 2021 - الحالي',
-  'exp1_desc':
+  Strings.exp1Title: 'مصمم منتجات أول',
+  Strings.exp1Company: 'تك كورب | 2021 - الحالي',
+  Strings.exp1Desc:
       'قيادة فريق نظام التصميم والإشراف على استراتيجية تجربة المستخدم لمنصتنا السحابية الأساسية.',
-  'exp2_title': 'مطور متكامل',
-  'exp2_company': 'ستوديو إبداعي | 2019 - 2021',
-  'exp2_desc':
+  Strings.exp2Title: 'مطور متكامل',
+  Strings.exp2Company: 'ستوديو إبداعي | 2019 - 2021',
+  Strings.exp2Desc:
       'تطوير تطبيقات React عالية الأداء وبناء خدمات Node.js خلفية مخصصة.',
-  'exp3_title': 'بكالوريوس علوم حاسوب',
-  'exp3_company': 'جامعة التكنولوجيا | 2015 - 2019',
-  'exp3_desc': 'تخصص في هندسة البرمجيات والتفاعل بين الإنسان والحاسوب.',
+  Strings.exp3Title: 'بكالوريوس علوم حاسوب',
+  Strings.exp3Company: 'جامعة التكنولوجيا | 2015 - 2019',
+  Strings.exp3Desc: 'تخصص في هندسة البرمجيات والتفاعل بين الإنسان والحاسوب.',
 
   // Skills Section
-  'skills_title': 'المهارات والخبرات',
-  'skills_subtitle': 'الأدوات والتقنيات التي أستخدمها لإحياء الأفكار',
-  'skill_frontend': 'تطوير الواجهات الأمامية',
-  'skill_backend': 'تطوير الواجهات الخلفية',
-  'skill_design': 'التصميم',
+  Strings.skillsTitle: 'المهارات والخبرات',
+  Strings.skillsSubtitle: 'الأدوات والتقنيات التي أستخدمها لإحياء الأفكار',
+  Strings.skillFrontend: 'تطوير الواجهات الأمامية',
+  Strings.skillBackend: 'تطوير الواجهات الخلفية',
+  Strings.skillDesign: 'التصميم',
 
   // General
-  'portfolio': 'بورتفوليو',
+  Strings.portfolio: 'بورتفوليو',
 };

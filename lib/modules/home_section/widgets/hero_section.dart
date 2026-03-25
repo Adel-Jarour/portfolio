@@ -5,6 +5,7 @@ import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/widgets/custom_button.dart';
 import 'package:portfolio/widgets/custom_text.dart';
+import 'package:portfolio/localization/strings.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
@@ -83,7 +84,7 @@ class HeroSection extends StatelessWidget {
             ),
           ),
           child: CustomText(
-            text: 'available_for_projects'.tr,
+            text: Strings.availableForProjects.tr,
             style: CustomTextStyle.caption,
             color: AppColors.badgeText,
             fontSize: 11,
@@ -97,20 +98,20 @@ class HeroSection extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: 'hero_title_1'.tr,
+                text: Strings.heroTitle1.tr,
                 style: AppTextStyles.h1.copyWith(
                   fontSize: isMobile ? 36 : 52,
                 ),
               ),
               TextSpan(
-                text: 'hero_title_highlight'.tr,
+                text: Strings.heroTitleHighlight.tr,
                 style: AppTextStyles.h1.copyWith(
                   fontSize: isMobile ? 36 : 52,
                   color: AppColors.primary,
                 ),
               ),
               TextSpan(
-                text: 'hero_title_2'.tr,
+                text: Strings.heroTitle2.tr,
                 style: AppTextStyles.h1.copyWith(
                   fontSize: isMobile ? 36 : 52,
                 ),
@@ -126,7 +127,7 @@ class HeroSection extends StatelessWidget {
             maxWidth: isMobile ? double.infinity : 420,
           ),
           child: CustomText(
-            text: 'hero_subtitle'.tr,
+            text: Strings.heroSubtitle.tr,
             style: CustomTextStyle.bodyMedium,
             textAlign: isMobile ? TextAlign.center : TextAlign.left,
           ),
@@ -140,13 +141,13 @@ class HeroSection extends StatelessWidget {
               isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: [
             CustomButton(
-              text: 'hire_me'.tr,
+              text: Strings.hireMe.tr,
               variant: CustomButtonVariant.filled,
               onPressed: () {},
             ),
             const SizedBox(width: AppSizes.md),
             CustomButton(
-              text: 'view_portfolio'.tr,
+              text: Strings.viewPortfolio.tr,
               variant: CustomButtonVariant.outlined,
               onPressed: () {},
             ),
@@ -196,7 +197,7 @@ class HeroSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSizes.sm + 4),
               child: Text(
-                'professional_profile'.tr,
+                Strings.professionalProfile.tr,
                 style: AppTextStyles.bodySmall.copyWith(
                   color: AppColors.textPrimary.withValues(alpha: 0.6),
                   fontWeight: FontWeight.w500,

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:portfolio/localization/strings.dart';
 
 class AppController extends GetxController {
   // Navbar state
@@ -6,11 +7,11 @@ class AppController extends GetxController {
   final isDarkMode = false.obs;
 
   final navItems = [
-    'nav_home',
-    'nav_about',
-    'nav_skills',
-    'nav_projects',
-    'nav_contact',
+    Strings.navHome,
+    Strings.navAbout,
+    Strings.navSkills,
+    Strings.navProjects,
+    Strings.navContact,
   ];
 
   void setSelectedIndex(int index) {
