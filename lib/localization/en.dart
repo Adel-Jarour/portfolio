@@ -53,6 +53,22 @@ const Map<String, String> en = {
   Strings.skillBackend: 'Backend',
   Strings.skillDesign: 'Design',
 
+  // Projects Section
+  Strings.selectedWorks: 'Selected Works',
+  Strings.selectedWorksSubtitle:
+      'A collection of projects that demonstrate my skills.',
+  Strings.viewArchive: 'View Archive',
+  Strings.project1Category: 'FINTECH',
+  Strings.project1Year: '2023',
+  Strings.project1Title: 'Vault Analytics Platform',
+  Strings.project1Desc:
+      'Enterprise-level financial tracking with real-time data visualization and predictive modeling.',
+  Strings.project2Category: 'E-COMMERCE',
+  Strings.project2Year: '2022',
+  Strings.project2Title: 'Lumina Storefront',
+  Strings.project2Desc:
+      'High-performance e-commerce experience with headless CMS integration and custom animations.',
+
   // General
   Strings.portfolio: 'Portfolio',
 };

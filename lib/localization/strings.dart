@@ -45,6 +45,19 @@ class Strings {
   static const String skillBackend = 'skill_backend';
   static const String skillDesign = 'skill_design';
 
+  // Projects Section
+  static const String selectedWorks = 'selected_works';
+  static const String selectedWorksSubtitle = 'selected_works_subtitle';
+  static const String viewArchive = 'view_archive';
+  static const String project1Category = 'project1_category';
+  static const String project1Year = 'project1_year';
+  static const String project1Title = 'project1_title';
+  static const String project1Desc = 'project1_desc';
+  static const String project2Category = 'project2_category';
+  static const String project2Year = 'project2_year';
+  static const String project2Title = 'project2_title';
+  static const String project2Desc = 'project2_desc';
+
   // General
   static const String portfolio = 'portfolio';
 }

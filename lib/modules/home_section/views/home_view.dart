@@ -3,6 +3,7 @@ import 'package:portfolio/modules/navbar/views/navbar_view.dart';
 import 'package:portfolio/modules/navbar/widgets/nav_drawer.dart';
 import 'package:portfolio/modules/home_section/widgets/hero_section.dart';
 import 'package:portfolio/modules/about_section/views/about_section.dart';
+import 'package:portfolio/modules/projects_section/views/projects_section.dart';
 import 'package:portfolio/modules/skills_section/views/skills_section.dart';
 
 class HomeView extends StatelessWidget {
@@ -25,6 +26,7 @@ class HomeView extends StatelessWidget {
                   HeroSection(),
                   AboutSection(),
                   SkillsSection(),
+                  ProjectsSection(),
                   // Future sections will be added here
                 ],
               ),

@@ -52,6 +52,21 @@ const Map<String, String> ar = {
   Strings.skillBackend: 'تطوير الواجهات الخلفية',
   Strings.skillDesign: 'التصميم',
 
+  // Projects Section
+  Strings.selectedWorks: 'الأعمال المختارة',
+  Strings.selectedWorksSubtitle: 'مجموعة من المشاريع التي تبرز مهاراتي.',
+  Strings.viewArchive: 'عرض الأرشيف',
+  Strings.project1Category: 'التكنولوجيا المالية',
+  Strings.project1Year: '2023',
+  Strings.project1Title: 'منصة تحليلات الخزنة',
+  Strings.project1Desc:
+      'تتبع مالي على مستوى المؤسسات مع تصور بيانات في الوقت الفعلي ونمذجة تنبؤية.',
+  Strings.project2Category: 'التجارة الإلكترونية',
+  Strings.project2Year: '2022',
+  Strings.project2Title: 'واجهة متجر لومينا',
+  Strings.project2Desc:
+      'تجربة تجارة إلكترونية عالية الأداء مع تكامل نظام إدارة محتوى بدون رأس ورسوم متحركة مخصصة.',
+
   // General
   Strings.portfolio: 'بورتفوليو',
 };
