@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
+import 'package:portfolio/widgets/custom_text.dart';
 
 class CustomTextField extends StatelessWidget {
   final String? hintText;
@@ -35,12 +36,11 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (labelText != null) ...[
-          Text(
-            labelText!,
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w500,
-            ),
+          CustomText(
+            text: labelText!,
+            style: CustomTextStyle.bodySmall,
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w500,
           ),
           const SizedBox(height: AppSizes.sm),
         ],

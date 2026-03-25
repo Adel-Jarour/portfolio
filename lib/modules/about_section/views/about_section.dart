@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
-import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/modules/about_section/widgets/experience_timeline.dart';
 import 'package:portfolio/modules/about_section/widgets/stats_row.dart';
 import 'package:portfolio/localization/strings.dart';
+import 'package:portfolio/widgets/custom_text.dart';
 
 class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
@@ -33,11 +33,10 @@ class AboutSection extends StatelessWidget {
           child: Column(
             children: [
               // Section title
-              Text(
-                Strings.aboutMe.tr,
-                style: AppTextStyles.h2.copyWith(
-                  fontSize: isMobile ? 28 : 36,
-                ),
+              CustomText(
+                text: Strings.aboutMe.tr,
+                style: CustomTextStyle.h2,
+                fontSize: isMobile ? 28 : 36,
               ),
               SizedBox(height: isMobile ? AppSizes.xl : AppSizes.xxl + 8),
 
@@ -86,20 +85,18 @@ class AboutSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Paragraph 1
-        Text(
-          Strings.aboutP1.tr,
-          style: AppTextStyles.bodyMedium.copyWith(
-            height: 1.8,
-          ),
+        CustomText(
+          text: Strings.aboutP1.tr,
+          style: CustomTextStyle.bodyMedium,
+          height: 1.8,
         ),
         const SizedBox(height: AppSizes.lg),
 
         // Paragraph 2
-        Text(
-          Strings.aboutP2.tr,
-          style: AppTextStyles.bodyMedium.copyWith(
-            height: 1.8,
-          ),
+        CustomText(
+          text: Strings.aboutP2.tr,
+          style: CustomTextStyle.bodyMedium,
+          height: 1.8,
         ),
         const SizedBox(height: AppSizes.xl + 8),
 

@@ -23,6 +23,8 @@ class CustomText extends StatelessWidget {
   final TextOverflow? overflow;
   final double? fontSize;
   final FontWeight? fontWeight;
+  final double? letterSpacing;
+  final double? height;
 
   const CustomText({
     super.key,
@@ -34,6 +36,8 @@ class CustomText extends StatelessWidget {
     this.overflow,
     this.fontSize,
     this.fontWeight,
+    this.letterSpacing,
+    this.height,
   });
 
   TextStyle get _baseStyle {
@@ -69,6 +73,8 @@ class CustomText extends StatelessWidget {
         color: color,
         fontSize: fontSize,
         fontWeight: fontWeight,
+        letterSpacing: letterSpacing,
+        height: height,
       ),
       textAlign: textAlign,
       maxLines: maxLines,

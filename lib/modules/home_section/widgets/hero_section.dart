@@ -196,13 +196,12 @@ class HeroSection extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSizes.sm + 4),
-              child: Text(
-                Strings.professionalProfile.tr,
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textPrimary.withValues(alpha: 0.6),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 13,
-                ),
+              child: CustomText(
+                text: Strings.professionalProfile.tr,
+                style: CustomTextStyle.bodySmall,
+                color: AppColors.textPrimary.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w500,
+                fontSize: 13,
               ),
             ),
           ],

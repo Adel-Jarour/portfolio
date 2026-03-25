@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
-import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/localization/strings.dart';
+import 'package:portfolio/widgets/custom_text.dart';
 
 class StatsRow extends StatelessWidget {
   const StatsRow({super.key});
@@ -11,9 +11,13 @@ class StatsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stats = [
-      _StatData(valueKey: Strings.statProjectsValue, labelKey: Strings.statProjects),
-      _StatData(valueKey: Strings.statClientsValue, labelKey: Strings.statClients),
-      _StatData(valueKey: Strings.statExperienceValue, labelKey: Strings.statExperience),
+      _StatData(
+          valueKey: Strings.statProjectsValue, labelKey: Strings.statProjects),
+      _StatData(
+          valueKey: Strings.statClientsValue, labelKey: Strings.statClients),
+      _StatData(
+          valueKey: Strings.statExperienceValue,
+          labelKey: Strings.statExperience),
     ];
 
     return Row(
@@ -26,22 +30,20 @@ class StatsRow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                stat.valueKey.tr,
-                style: AppTextStyles.h2.copyWith(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
+              CustomText(
+                text: stat.valueKey.tr,
+                style: CustomTextStyle.h2,
+                fontSize: 32,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
               ),
               const SizedBox(height: 4),
-              Text(
-                stat.labelKey.tr,
-                style: AppTextStyles.caption.copyWith(
-                  fontSize: 10,
-                  color: AppColors.textSecondary,
-                  letterSpacing: 1.5,
-                ),
+              CustomText(
+                text: stat.labelKey.tr,
+                style: CustomTextStyle.caption,
+                fontSize: 10,
+                color: AppColors.textSecondary,
+                letterSpacing: 1.5,
               ),
             ],
           ),

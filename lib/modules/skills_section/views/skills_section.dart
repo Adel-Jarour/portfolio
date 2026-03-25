@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
-import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/localization/strings.dart';
 import 'package:portfolio/modules/skills_section/widgets/skill_card.dart';
+import 'package:portfolio/widgets/custom_text.dart';
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
@@ -66,20 +66,18 @@ class SkillsSection extends StatelessWidget {
           children: [
             Column(
               children: [
-                Text(
-                  Strings.skillsTitle.tr,
-                  style: AppTextStyles.h2.copyWith(
-                    fontSize: isMobile ? 32 : 40,
-                    fontWeight: FontWeight.w800,
-                  ),
+                CustomText(
+                  text: Strings.skillsTitle.tr,
+                  style: CustomTextStyle.h2,
+                  fontSize: isMobile ? 32 : 40,
+                  fontWeight: FontWeight.w800,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: AppSizes.sm),
-                Text(
-                  Strings.skillsSubtitle.tr,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
+                CustomText(
+                  text: Strings.skillsSubtitle.tr,
+                  style: CustomTextStyle.bodyMedium,
+                  color: AppColors.textSecondary,
                   textAlign: TextAlign.center,
                 ),
               ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
-import 'package:portfolio/core/constants/app_text_styles.dart';
+import 'package:portfolio/widgets/custom_text.dart';
 
 class SkillCard extends StatelessWidget {
   final IconData icon;
@@ -49,12 +49,11 @@ class SkillCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSizes.lg),
-          Text(
-            title,
-            style: AppTextStyles.h4.copyWith(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+          CustomText(
+            text: title,
+            style: CustomTextStyle.h4,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
           ),
           const SizedBox(height: AppSizes.lg),
           Wrap(
@@ -84,12 +83,11 @@ class _BuildTag extends StatelessWidget {
         color: AppColors.badgeBg,
         borderRadius: BorderRadius.circular(AppSizes.radiusFull),
       ),
-      child: Text(
-        text,
-        style: AppTextStyles.bodySmall.copyWith(
-          color: AppColors.primaryLight,
-          fontWeight: FontWeight.w600,
-        ),
+      child: CustomText(
+        text: text,
+        style: CustomTextStyle.bodySmall,
+        color: AppColors.primaryLight,
+        fontWeight: FontWeight.w600,
       ),
     );
   }

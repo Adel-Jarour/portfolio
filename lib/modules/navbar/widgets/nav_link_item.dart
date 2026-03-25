@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
-import 'package:portfolio/core/constants/app_text_styles.dart';
+import 'package:portfolio/widgets/custom_text.dart';
 
 class NavLinkItem extends StatefulWidget {
   final String title;
@@ -35,12 +35,11 @@ class _NavLinkItemState extends State<NavLinkItem> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Text(
-            widget.title.tr,
-            style: AppTextStyles.navLink.copyWith(
-              color: isActive ? AppColors.primary : AppColors.navLinkText,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-            ),
+          child: CustomText(
+            text: widget.title.tr,
+            style: CustomTextStyle.navLink,
+            color: isActive ? AppColors.primary : AppColors.navLinkText,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
           ),
         ),
       ),

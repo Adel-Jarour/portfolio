@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
-import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/widgets/custom_button.dart';
 import 'package:portfolio/core/controllers/app_controller.dart';
 import 'package:portfolio/localization/strings.dart';
 import 'package:portfolio/modules/navbar/widgets/nav_link_item.dart';
+import 'package:portfolio/widgets/custom_text.dart';
 
 class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -94,20 +94,20 @@ class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
             borderRadius: BorderRadius.circular(AppSizes.radiusSm),
           ),
           child: const Center(
-            child: Text(
-              '</>',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
+            child: CustomText(
+              text: '</>',
+              style: CustomTextStyle.bodyMedium,
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
         const SizedBox(width: AppSizes.sm),
-        Text(
-          'Portfolio',
-          style: AppTextStyles.h4.copyWith(fontSize: 18),
+        CustomText(
+          text: 'Portfolio',
+          style: CustomTextStyle.h4,
+          fontSize: 18,
         ),
       ],
     );

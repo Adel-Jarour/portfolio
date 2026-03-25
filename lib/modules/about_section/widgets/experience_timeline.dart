@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
-import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/localization/strings.dart';
+import 'package:portfolio/widgets/custom_text.dart';
 
 class ExperienceTimeline extends StatelessWidget {
   const ExperienceTimeline({super.key});
@@ -84,24 +84,23 @@ class ExperienceTimeline extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        item.titleKey.tr,
-                        style: AppTextStyles.h4.copyWith(fontSize: 17),
+                      CustomText(
+                        text: item.titleKey.tr,
+                        style: CustomTextStyle.h4,
+                        fontSize: 17,
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        item.companyKey.tr,
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      CustomText(
+                        text: item.companyKey.tr,
+                        style: CustomTextStyle.bodySmall,
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w500,
                       ),
                       const SizedBox(height: AppSizes.sm),
-                      Text(
-                        item.descKey.tr,
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                      CustomText(
+                        text: item.descKey.tr,
+                        style: CustomTextStyle.bodySmall,
+                        color: AppColors.textSecondary,
                       ),
                     ],
                   ),
