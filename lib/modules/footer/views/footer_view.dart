@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
+import 'package:portfolio/core/constants/app_text_styles.dart';
 import 'package:portfolio/localization/strings.dart';
 import 'package:portfolio/widgets/custom_text.dart';
+import 'package:portfolio/core/controllers/app_controller.dart';
 
-class FooterView extends StatelessWidget {
+class FooterView extends GetView<AppController> {
   const FooterView({super.key});
 
   @override
@@ -15,166 +17,452 @@ class FooterView extends StatelessWidget {
     final isTablet = screenWidth <= AppSizes.tabletBreakpoint && !isMobile;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      width: double.infinity,
-      color: isDark ? AppColors.darkCard : AppColors.cardBackground,
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile
-            ? AppSizes.pagePaddingMobile
-            : isTablet
-                ? AppSizes.pagePaddingTablet
-                : AppSizes.pagePaddingDesktop,
-        vertical: AppSizes.xxl,
-      ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: AppSizes.maxContentWidth),
-          child: Column(
-            children: [
-              isMobile
-                  ? _buildMobileTop(isDark)
-                  : _buildDesktopTop(isDark),
-              const SizedBox(height: AppSizes.xl),
-              Divider(
-                color: isDark ? AppColors.darkBorder : AppColors.borderLight,
-                height: 1,
+    // We use the dark Card color for the footer background to match the "dark" aesthetic
+    // of the image, even if we are in light mode, or adapt it if user wants light mode footer.
+    // The image specifically shows a very dark footer. Let's make it adapt to the theme as requested.
+    final bgColor = isDark ? AppColors.darkCard : AppColors.cardBackground;
+    final textColorPrimary =
+        isDark ? AppColors.darkText : AppColors.textPrimary;
+    final textColorSecondary =
+        isDark ? AppColors.darkTextSecondary : AppColors.textSecondary;
+
+    return Column(
+      children: [
+        // Top Gradient Line
+        Container(
+          height: 2,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                AppColors.primaryDark,
+                AppColors.primaryLight,
+              ],
+            ),
+          ),
+        ),
+        // Main Footer Content
+        Container(
+          width: double.infinity,
+          color: bgColor,
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile
+                ? AppSizes.pagePaddingMobile
+                : isTablet
+                    ? AppSizes.pagePaddingTablet
+                    : AppSizes.pagePaddingDesktop,
+            vertical: AppSizes.xxxl,
+          ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints:
+                  const BoxConstraints(maxWidth: AppSizes.maxContentWidth),
+              child: Column(
+                children: [
+                  // Top Section (3 Columns on Desktop, 1 on Mobile/Tablet)
+                  if (isMobile || isTablet)
+                    _buildMobileContent(
+                        textColorPrimary, textColorSecondary, isDark, isMobile)
+                  else
+                    _buildDesktopContent(
+                        textColorPrimary, textColorSecondary, isDark),
+
+                  const SizedBox(height: AppSizes.xxxl),
+
+                  // Divider
+                  Divider(
+                    color: isDark ? AppColors.darkBorder : AppColors.border,
+                    height: 1,
+                  ),
+
+                  const SizedBox(height: AppSizes.xl),
+
+                  // Bottom Section
+                  if (isMobile)
+                    _buildBottomMobile(textColorSecondary, isDark)
+                  else
+                    _buildBottomDesktop(textColorSecondary, isDark),
+                ],
               ),
-              const SizedBox(height: AppSizes.xl),
-              CustomText(
-                text: Strings.footerCopyright.tr,
-                style: CustomTextStyle.bodySmall,
-                color: isDark
-                    ? AppColors.darkTextSecondary
-                    : AppColors.textSecondary,
-                textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopContent(
+      Color textColorPrimary, Color textColorSecondary, bool isDark) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+            flex: 4,
+            child:
+                _buildLeftColumn(textColorPrimary, textColorSecondary, isDark)),
+        const SizedBox(width: AppSizes.xl),
+        Expanded(
+            flex: 3,
+            child: _buildMiddleColumn(
+                textColorPrimary, textColorSecondary, isDark)),
+        const SizedBox(width: AppSizes.xl),
+        Expanded(
+            flex: 4,
+            child: _buildRightColumn(
+                textColorPrimary, textColorSecondary, isDark)),
+      ],
+    );
+  }
+
+  Widget _buildMobileContent(Color textColorPrimary, Color textColorSecondary,
+      bool isDark, bool isMobile) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildLeftColumn(textColorPrimary, textColorSecondary, isDark),
+        const SizedBox(height: AppSizes.xxl),
+        _buildMiddleColumn(textColorPrimary, textColorSecondary, isDark),
+        const SizedBox(height: AppSizes.xxl),
+        _buildRightColumn(textColorPrimary, textColorSecondary, isDark),
+      ],
+    );
+  }
+
+  // ─── Left Column: Brand & Badges ──────────────────────────────────────────
+  Widget _buildLeftColumn(
+      Color textColorPrimary, Color textColorSecondary, bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Logo and Name
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(AppSizes.radiusSm),
+              ),
+              child: const Center(
+                child: CustomText(
+                  text: '</>',
+                  style: CustomTextStyle.h4,
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(width: AppSizes.md),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                  text: 'Adel Jarour',
+                  style: CustomTextStyle.h3,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: textColorPrimary,
+                ),
+                CustomText(
+                  text: 'Flutter Developer',
+                  style: CustomTextStyle.bodyMedium,
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSizes.lg),
+
+        // Description
+        CustomText(
+          text:
+              "Building responsive, performant, and scalable cross-platform mobile & web apps with Flutter.",
+          style: CustomTextStyle.bodyMedium,
+          color: textColorSecondary,
+          height: 1.6,
+        ),
+        const SizedBox(height: AppSizes.xl),
+
+        // Badges
+        Wrap(
+          spacing: AppSizes.sm,
+          runSpacing: AppSizes.sm,
+          children: [
+            _buildBadgeItem('Flutter', Icons.flutter_dash, isDark),
+            _buildBadgeItem('Dart', Icons.code, isDark),
+            _buildBadgeItem('GetX', Icons.bolt, isDark),
+            _buildBadgeItem('Responsive Design', Icons.devices, isDark),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBadgeItem(String text, IconData icon, bool isDark) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: 8),
+      decoration: BoxDecoration(
+        color: isDark
+            ? const Color(0xFF13132A)
+            : AppColors.badgeBg, // Slightly darker than card
+        borderRadius: BorderRadius.circular(AppSizes.radiusFull),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorderLight : AppColors.borderLight,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon,
+              size: 14,
+              color: isDark ? AppColors.primaryLight : AppColors.primary),
+          const SizedBox(width: 6),
+          CustomText(
+            text: text,
+            style: CustomTextStyle.caption,
+            color: isDark ? AppColors.darkTextSecondary : AppColors.textPrimary,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─── Middle Column: Links & Socials ─────────────────────────────────────
+  Widget _buildMiddleColumn(
+      Color textColorPrimary, Color textColorSecondary, bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          text: 'Quick Links',
+          style: CustomTextStyle.h4,
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: textColorPrimary,
+        ),
+        const SizedBox(height: AppSizes.lg),
+        _buildLinkItem(Strings.navHome.tr, Icons.home_outlined,
+            () => controller.scrollToSection(0), textColorSecondary),
+        _buildLinkItem(Strings.navAbout.tr, Icons.person_outline,
+            () => controller.scrollToSection(1), textColorSecondary),
+        _buildLinkItem(Strings.navProjects.tr, Icons.folder_outlined,
+            () => controller.scrollToSection(3), textColorSecondary),
+        _buildLinkItem(Strings.navContact.tr, Icons.email_outlined,
+            () => controller.scrollToSection(4), textColorSecondary),
+
+        const SizedBox(height: AppSizes.xl),
+
+        // Social Blocks
+        Row(
+          children: [
+            _buildSocialBlock(Icons.code, isDark),
+            const SizedBox(width: AppSizes.md),
+            _buildSocialBlock(Icons.work_outline, isDark),
+            const SizedBox(width: AppSizes.md),
+            _buildSocialBlock(Icons.email_outlined, isDark),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _buildLinkItem(
+      String text, IconData icon, VoidCallback onTap, Color textColor) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: AppSizes.md),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 18, color: textColor),
+            const SizedBox(width: AppSizes.sm),
+            CustomText(
+              text: text,
+              style: CustomTextStyle.bodyMedium,
+              color: textColor,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialBlock(IconData icon, bool isDark) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF13132A) : AppColors.badgeBg,
+            borderRadius: BorderRadius.circular(AppSizes.radiusSm),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorderLight : AppColors.borderLight,
+            )),
+        child: Icon(icon,
+            color: isDark ? AppColors.darkText : AppColors.textPrimary,
+            size: 20),
+      ),
+    );
+  }
+
+  // ─── Right Column: Contact CTA ──────────────────────────────────────────
+  Widget _buildRightColumn(
+      Color textColorPrimary, Color textColorSecondary, bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "Let's build something\n",
+                style: AppTextStyles.h3.copyWith(
+                    color: textColorPrimary,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700),
+              ),
+              TextSpan(
+                text: "together",
+                style: AppTextStyles.h3.copyWith(
+                    color: AppColors.primary,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildDesktopTop(bool isDark) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _buildLogo(isDark),
-        _buildLinks(isDark: isDark),
-        _buildSocialIcons(isDark),
-      ],
-    );
-  }
-
-  Widget _buildMobileTop(bool isDark) {
-    return Column(
-      children: [
-        _buildLogo(isDark),
+        const SizedBox(height: AppSizes.md),
+        CustomText(
+          text:
+              "I'm open to freelance projects, full-time opportunities, and exciting collaborations.",
+          style: CustomTextStyle.bodyMedium,
+          color: textColorSecondary,
+          height: 1.6,
+        ),
         const SizedBox(height: AppSizes.xl),
-        _buildLinks(isMobile: true, isDark: isDark),
-        const SizedBox(height: AppSizes.xl),
-        _buildSocialIcons(isDark),
-      ],
-    );
-  }
-
-  Widget _buildLogo(bool isDark) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(AppSizes.radiusSm),
-          ),
-          child: const Center(
-            child: CustomText(
-              text: '</>',
-              style: CustomTextStyle.bodyMedium,
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
+        InkWell(
+          onTap: () => controller.scrollToSection(4),
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppSizes.xl, vertical: AppSizes.md),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppColors.primaryDark, AppColors.primaryLight],
+              ),
+              borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.send_rounded, color: Colors.white, size: 18),
+                const SizedBox(width: AppSizes.sm),
+                CustomText(
+                  text: "${Strings.contact.tr} Me",
+                  style: CustomTextStyle.button,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ],
             ),
           ),
         ),
-        const SizedBox(width: AppSizes.sm),
-        CustomText(
-          text: 'Portfolio',
-          style: CustomTextStyle.h4,
-          fontSize: 18,
-          color: isDark ? AppColors.darkText : null,
-        ),
       ],
     );
   }
 
-  Widget _buildLinks({bool isMobile = false, bool isDark = false}) {
-    final links = [
-      Strings.privacyPolicy.tr,
-      Strings.termsOfService.tr,
-      Strings.latestWork.tr,
-      Strings.contact.tr,
-    ];
-
-    if (isMobile) {
-      return Wrap(
-        spacing: AppSizes.lg,
-        runSpacing: AppSizes.md,
-        alignment: WrapAlignment.center,
-        children:
-            links.map((link) => _buildLinkItem(link, isDark: isDark)).toList(),
-      );
-    }
-
+  // ─── Bottom Rows ────────────────────────────────────────────────────────
+  Widget _buildBottomDesktop(Color textColorSecondary, bool isDark) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(
-        links.length,
-        (index) => Padding(
-          padding: EdgeInsets.only(
-            right: index < links.length - 1 ? AppSizes.xl : 0,
-          ),
-          child: _buildLinkItem(links[index], isDark: isDark),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLinkItem(String text, {bool isDark = false}) {
-    return InkWell(
-      onTap: () {},
-      child: CustomText(
-        text: text,
-        style: CustomTextStyle.bodyMedium,
-        color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
-
-  Widget _buildSocialIcons(bool isDark) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildIcon(Icons.share_outlined, isDark),
-        const SizedBox(width: AppSizes.md),
-        _buildIcon(Icons.rss_feed_outlined, isDark),
-        const SizedBox(width: AppSizes.md),
-        _buildIcon(Icons.star_border_outlined, isDark),
+        CustomText(
+          text: "© 2026 Adel Jarour. All rights reserved.",
+          style: CustomTextStyle.caption,
+          color: textColorSecondary,
+        ),
+        Row(
+          children: [
+            Icon(Icons.star, color: AppColors.primary, size: 14),
+            const SizedBox(width: 8),
+            CustomText(
+              text: "Built with Flutter • GetX • Responsive Design",
+              style: CustomTextStyle.caption,
+              color: textColorSecondary,
+            ),
+          ],
+        ),
+        Row(children: [
+          CustomText(
+            text: "Designed & Coded with ",
+            style: CustomTextStyle.caption,
+            color: textColorSecondary,
+          ),
+          const Icon(Icons.favorite, color: Colors.blue, size: 14),
+          CustomText(
+            text: " in Flutter",
+            style: CustomTextStyle.caption,
+            color: textColorSecondary,
+          ),
+        ])
       ],
     );
   }
 
-  Widget _buildIcon(IconData icon, bool isDark) {
-    return InkWell(
-      onTap: () {},
-      child: Icon(
-        icon,
-        color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
-        size: 20,
-      ),
+  Widget _buildBottomMobile(Color textColorSecondary, bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.star, color: AppColors.primary, size: 14),
+            const SizedBox(width: 8),
+            CustomText(
+              text: "Built with Flutter • GetX • Responsive Design",
+              style: CustomTextStyle.caption,
+              color: textColorSecondary,
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSizes.lg),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          CustomText(
+            text: "Designed & Coded with ",
+            style: CustomTextStyle.caption,
+            color: textColorSecondary,
+          ),
+          const Icon(Icons.favorite, color: Colors.blue, size: 14),
+          CustomText(
+            text: " in Flutter",
+            style: CustomTextStyle.caption,
+            color: textColorSecondary,
+          ),
+        ]),
+        const SizedBox(height: AppSizes.lg),
+        CustomText(
+          text: "© 2026 Adel Jarour. All rights reserved.",
+          style: CustomTextStyle.caption,
+          color: textColorSecondary,
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
