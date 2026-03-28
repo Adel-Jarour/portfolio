@@ -3,63 +3,15 @@ import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/localization/strings.dart';
+import 'package:portfolio/modules/projects_section/controllers/projects_anim_controller.dart';
 import 'package:portfolio/modules/projects_section/widgets/project_card.dart';
 import 'package:portfolio/widgets/animated_fade_slide.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class ProjectsSection extends StatefulWidget {
+class ProjectsSection extends GetView<ProjectsAnimController> {
   final Key? sectionKey;
   const ProjectsSection({super.key, this.sectionKey});
-
-  @override
-  State<ProjectsSection> createState() => _ProjectsSectionState();
-}
-
-class _ProjectsSectionState extends State<ProjectsSection>
-    with TickerProviderStateMixin {
-  late AnimationController _headerCtrl;
-  late AnimationController _card1Ctrl;
-  late AnimationController _card2Ctrl;
-  bool _animated = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _headerCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 700),
-    );
-    _card1Ctrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
-    _card2Ctrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
-  }
-
-  @override
-  void dispose() {
-    _headerCtrl.dispose();
-    _card1Ctrl.dispose();
-    _card2Ctrl.dispose();
-    super.dispose();
-  }
-
-  void _onVisibility(VisibilityInfo info) {
-    if (!_animated && info.visibleFraction > 0.1) {
-      _animated = true;
-      _headerCtrl.forward();
-      Future.delayed(const Duration(milliseconds: 200), () {
-        if (mounted) _card1Ctrl.forward();
-      });
-      Future.delayed(const Duration(milliseconds: 400), () {
-        if (mounted) _card2Ctrl.forward();
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +22,9 @@ class _ProjectsSectionState extends State<ProjectsSection>
 
     return VisibilityDetector(
       key: const Key('projects-section'),
-      onVisibilityChanged: _onVisibility,
+      onVisibilityChanged: controller.onVisibility,
       child: Container(
-        key: widget.sectionKey,
+        key: sectionKey,
         width: double.infinity,
         color: isDark ? AppColors.darkCard : AppColors.cardBackground,
         padding: EdgeInsets.symmetric(
@@ -92,7 +44,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
               children: [
                 // Header Row
                 AnimatedFadeSlide(
-                  animation: _headerCtrl,
+                  animation: controller.headerCtrl,
                   beginOffset: const Offset(0, 0.08),
                   child: isMobile
                       ? Column(
@@ -120,13 +72,13 @@ class _ProjectsSectionState extends State<ProjectsSection>
                   Column(
                     children: [
                       AnimatedFadeSlide(
-                        animation: _card1Ctrl,
+                        animation: controller.card1Ctrl,
                         beginOffset: const Offset(0, 0.12),
                         child: _buildCard1(isDark),
                       ),
                       const SizedBox(height: AppSizes.xl),
                       AnimatedFadeSlide(
-                        animation: _card2Ctrl,
+                        animation: controller.card2Ctrl,
                         beginOffset: const Offset(0, 0.12),
                         child: _buildCard2(isDark),
                       ),
@@ -137,7 +89,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
                     children: [
                       Expanded(
                         child: AnimatedFadeSlide(
-                          animation: _card1Ctrl,
+                          animation: controller.card1Ctrl,
                           beginOffset: const Offset(0, 0.12),
                           child: _buildCard1(isDark),
                         ),
@@ -145,7 +97,7 @@ class _ProjectsSectionState extends State<ProjectsSection>
                       const SizedBox(width: AppSizes.xxl),
                       Expanded(
                         child: AnimatedFadeSlide(
-                          animation: _card2Ctrl,
+                          animation: controller.card2Ctrl,
                           beginOffset: const Offset(0, 0.12),
                           child: _buildCard2(isDark),
                         ),

@@ -3,48 +3,16 @@ import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
+import 'package:portfolio/modules/home_section/controllers/hero_anim_controller.dart';
 import 'package:portfolio/widgets/animated_fade_slide.dart';
 import 'package:portfolio/widgets/custom_button.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 import 'package:portfolio/localization/strings.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class HeroSection extends StatefulWidget {
+class HeroSection extends GetView<HeroAnimController> {
   final Key? sectionKey;
   const HeroSection({super.key, this.sectionKey});
-
-  @override
-  State<HeroSection> createState() => _HeroSectionState();
-}
-
-class _HeroSectionState extends State<HeroSection>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl;
-  bool _animated = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    );
-    // Home section is always visible on load – animate immediately
-    WidgetsBinding.instance.addPostFrameCallback((_) => _ctrl.forward());
-  }
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  void _onVisibilityChanged(VisibilityInfo info) {
-    if (!_animated && info.visibleFraction > 0.1) {
-      _animated = true;
-      _ctrl.forward();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +23,9 @@ class _HeroSectionState extends State<HeroSection>
 
     return VisibilityDetector(
       key: const Key('hero-section'),
-      onVisibilityChanged: _onVisibilityChanged,
+      onVisibilityChanged: controller.onVisibility,
       child: Container(
-        key: widget.sectionKey,
+        key: sectionKey,
         width: double.infinity,
         color: isDark ? AppColors.darkBackground : AppColors.background,
         padding: EdgeInsets.symmetric(
@@ -88,7 +56,7 @@ class _HeroSectionState extends State<HeroSection>
         Expanded(
           flex: 5,
           child: AnimatedFadeSlide(
-            animation: _ctrl,
+            animation: controller.animCtrl,
             beginOffset: const Offset(-0.12, 0),
             child: _buildTextContent(false, isDark),
           ),
@@ -97,7 +65,7 @@ class _HeroSectionState extends State<HeroSection>
         Expanded(
           flex: 5,
           child: AnimatedFadeSlide(
-            animation: _ctrl,
+            animation: controller.animCtrl,
             beginOffset: const Offset(0.12, 0),
             child: _buildProfileImage(false),
           ),
@@ -110,13 +78,13 @@ class _HeroSectionState extends State<HeroSection>
     return Column(
       children: [
         AnimatedFadeSlide(
-          animation: _ctrl,
+          animation: controller.animCtrl,
           beginOffset: const Offset(-0.1, 0),
           child: _buildTextContent(true, isDark),
         ),
         const SizedBox(height: AppSizes.xl),
         AnimatedFadeSlide(
-          animation: _ctrl,
+          animation: controller.animCtrl,
           beginOffset: const Offset(0.1, 0),
           child: _buildProfileImage(true),
         ),

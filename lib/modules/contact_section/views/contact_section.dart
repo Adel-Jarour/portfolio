@@ -3,46 +3,16 @@ import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/localization/strings.dart';
+import 'package:portfolio/modules/contact_section/controllers/contact_anim_controller.dart';
 import 'package:portfolio/widgets/animated_fade_slide.dart';
 import 'package:portfolio/widgets/custom_button.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 import 'package:portfolio/widgets/custom_text_field.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class ContactSection extends StatefulWidget {
+class ContactSection extends GetView<ContactAnimController> {
   final Key? sectionKey;
   const ContactSection({super.key, this.sectionKey});
-
-  @override
-  State<ContactSection> createState() => _ContactSectionState();
-}
-
-class _ContactSectionState extends State<ContactSection>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl;
-  bool _animated = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    );
-  }
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  void _onVisibility(VisibilityInfo info) {
-    if (!_animated && info.visibleFraction > 0.1) {
-      _animated = true;
-      _ctrl.forward();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +23,9 @@ class _ContactSectionState extends State<ContactSection>
 
     return VisibilityDetector(
       key: const Key('contact-section'),
-      onVisibilityChanged: _onVisibility,
+      onVisibilityChanged: controller.onVisibility,
       child: Container(
-        key: widget.sectionKey,
+        key: sectionKey,
         width: double.infinity,
         color: isDark ? AppColors.darkHero : AppColors.heroBackground,
         padding: EdgeInsets.symmetric(
@@ -86,7 +56,7 @@ class _ContactSectionState extends State<ContactSection>
         Expanded(
           flex: 5,
           child: AnimatedFadeSlide(
-            animation: _ctrl,
+            animation: controller.animCtrl,
             beginOffset: const Offset(-0.12, 0),
             child: _buildLeftContent(isDark),
           ),
@@ -95,7 +65,7 @@ class _ContactSectionState extends State<ContactSection>
         Expanded(
           flex: 6,
           child: AnimatedFadeSlide(
-            animation: _ctrl,
+            animation: controller.animCtrl,
             beginOffset: const Offset(0.12, 0),
             child: _buildContactForm(false, isDark),
           ),
@@ -109,13 +79,13 @@ class _ContactSectionState extends State<ContactSection>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AnimatedFadeSlide(
-          animation: _ctrl,
+          animation: controller.animCtrl,
           beginOffset: const Offset(-0.1, 0),
           child: _buildLeftContent(isDark),
         ),
         const SizedBox(height: AppSizes.xxxl),
         AnimatedFadeSlide(
-          animation: _ctrl,
+          animation: controller.animCtrl,
           beginOffset: const Offset(0.1, 0),
           child: _buildContactForm(isMobile, isDark),
         ),

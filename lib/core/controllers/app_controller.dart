@@ -8,6 +8,10 @@ class AppController extends GetxController {
   final isDarkMode = false.obs;
   final showBackToTop = false.obs;
 
+  // Scroll & scaffold
+  final scrollController = ScrollController();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   final navItems = [
     Strings.navHome,
     Strings.navAbout,
@@ -26,6 +30,19 @@ class AppController extends GetxController {
   List<GlobalKey> get sectionKeys =>
       [homeKey, aboutKey, skillsKey, projectsKey, contactKey];
 
+  @override
+  void onInit() {
+    super.onInit();
+    scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    final showBtn = scrollController.offset > 300;
+    if (showBtn != showBackToTop.value) {
+      showBackToTop.value = showBtn;
+    }
+  }
+
   void setSelectedIndex(int index) {
     selectedIndex.value = index;
   }
@@ -37,7 +54,7 @@ class AppController extends GetxController {
     );
   }
 
-  void scrollToSection(int index, ScrollController scrollController) {
+  void scrollToSection(int index) {
     setSelectedIndex(index);
     final key = sectionKeys[index];
     final context = key.currentContext;
@@ -51,12 +68,19 @@ class AppController extends GetxController {
     }
   }
 
-  void scrollToTop(ScrollController scrollController) {
+  void scrollToTop() {
     scrollController.animateTo(
       0,
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInOut,
     );
     setSelectedIndex(0);
+  }
+
+  @override
+  void onClose() {
+    scrollController.removeListener(_onScroll);
+    scrollController.dispose();
+    super.onClose();
   }
 }

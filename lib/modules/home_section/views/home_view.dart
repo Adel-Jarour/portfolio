@@ -11,86 +11,53 @@ import 'package:portfolio/modules/about_section/views/about_section.dart';
 import 'package:portfolio/modules/projects_section/views/projects_section.dart';
 import 'package:portfolio/modules/skills_section/views/skills_section.dart';
 
-class HomeView extends StatefulWidget {
+class HomeView extends GetView<AppController> {
   const HomeView({super.key});
-
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  late final ScrollController _scrollController;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  late final AppController _ctrl;
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrl = Get.find<AppController>();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    final showBtn = _scrollController.offset > 300;
-    if (showBtn != _ctrl.showBackToTop.value) {
-      _ctrl.showBackToTop.value = showBtn;
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      key: scaffoldKey,
+      key: controller.scaffoldKey,
       backgroundColor: isDark ? AppColors.darkBackground : AppColors.background,
-      endDrawer: NavDrawer(scrollController: _scrollController),
+      endDrawer: const NavDrawer(),
       floatingActionButton: Obx(() => AnimatedOpacity(
-            opacity: _ctrl.showBackToTop.value ? 1.0 : 0.0,
+            opacity: controller.showBackToTop.value ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 300),
             child: AnimatedSlide(
-              offset: _ctrl.showBackToTop.value
+              offset: controller.showBackToTop.value
                   ? Offset.zero
                   : const Offset(0, 0.5),
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeOut,
               child: IgnorePointer(
-                ignoring: !_ctrl.showBackToTop.value,
+                ignoring: !controller.showBackToTop.value,
                 child: FloatingActionButton(
-                  onPressed: () => _ctrl.scrollToTop(_scrollController),
+                  onPressed: controller.scrollToTop,
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   elevation: 6,
                   shape: const CircleBorder(),
-                  child: const Icon(Icons.keyboard_arrow_up_rounded, size: 28),
+                  child:
+                      const Icon(Icons.keyboard_arrow_up_rounded, size: 28),
                 ),
               ),
             ),
           )),
       body: Column(
         children: [
-          NavbarView(
-            scaffoldKey: scaffoldKey,
-            scrollController: _scrollController,
-          ),
+          NavbarView(scaffoldKey: controller.scaffoldKey),
           Expanded(
             child: SingleChildScrollView(
-              controller: _scrollController,
+              controller: controller.scrollController,
               child: Column(
                 children: [
-                  HeroSection(sectionKey: _ctrl.homeKey),
-                  AboutSection(sectionKey: _ctrl.aboutKey),
-                  SkillsSection(sectionKey: _ctrl.skillsKey),
-                  ProjectsSection(sectionKey: _ctrl.projectsKey),
-                  ContactSection(sectionKey: _ctrl.contactKey),
+                  HeroSection(sectionKey: controller.homeKey),
+                  AboutSection(sectionKey: controller.aboutKey),
+                  SkillsSection(sectionKey: controller.skillsKey),
+                  ProjectsSection(sectionKey: controller.projectsKey),
+                  ContactSection(sectionKey: controller.contactKey),
                   const FooterView(),
                 ],
               ),

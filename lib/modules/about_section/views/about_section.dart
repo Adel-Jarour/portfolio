@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
+import 'package:portfolio/modules/about_section/controllers/about_anim_controller.dart';
 import 'package:portfolio/modules/about_section/widgets/experience_timeline.dart';
 import 'package:portfolio/modules/about_section/widgets/stats_row.dart';
 import 'package:portfolio/localization/strings.dart';
@@ -9,38 +10,9 @@ import 'package:portfolio/widgets/animated_fade_slide.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class AboutSection extends StatefulWidget {
+class AboutSection extends GetView<AboutAnimController> {
   final Key? sectionKey;
   const AboutSection({super.key, this.sectionKey});
-
-  @override
-  State<AboutSection> createState() => _AboutSectionState();
-}
-
-class _AboutSectionState extends State<AboutSection>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl;
-  bool _animated = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 900));
-  }
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  void _onVisibility(VisibilityInfo info) {
-    if (!_animated && info.visibleFraction > 0.1) {
-      _animated = true;
-      _ctrl.forward();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +23,9 @@ class _AboutSectionState extends State<AboutSection>
 
     return VisibilityDetector(
       key: const Key('about-section'),
-      onVisibilityChanged: _onVisibility,
+      onVisibilityChanged: controller.onVisibility,
       child: Container(
-        key: widget.sectionKey,
+        key: sectionKey,
         width: double.infinity,
         color: isDark ? AppColors.darkCard : AppColors.cardBackground,
         padding: EdgeInsets.symmetric(
@@ -71,7 +43,7 @@ class _AboutSectionState extends State<AboutSection>
             child: Column(
               children: [
                 AnimatedFadeSlide(
-                  animation: _ctrl,
+                  animation: controller.animCtrl,
                   beginOffset: const Offset(0, 0.08),
                   child: CustomText(
                     text: Strings.aboutMe.tr,
@@ -99,7 +71,7 @@ class _AboutSectionState extends State<AboutSection>
         Expanded(
           flex: 5,
           child: AnimatedFadeSlide(
-            animation: _ctrl,
+            animation: controller.animCtrl,
             beginOffset: const Offset(-0.12, 0),
             child: _buildBioContent(isDark),
           ),
@@ -108,7 +80,7 @@ class _AboutSectionState extends State<AboutSection>
         Expanded(
           flex: 5,
           child: AnimatedFadeSlide(
-            animation: _ctrl,
+            animation: controller.animCtrl,
             beginOffset: const Offset(0.12, 0),
             child: ExperienceTimeline(isDark: isDark),
           ),
@@ -121,13 +93,13 @@ class _AboutSectionState extends State<AboutSection>
     return Column(
       children: [
         AnimatedFadeSlide(
-          animation: _ctrl,
+          animation: controller.animCtrl,
           beginOffset: const Offset(-0.1, 0),
           child: _buildBioContent(isDark),
         ),
         const SizedBox(height: AppSizes.xl),
         AnimatedFadeSlide(
-          animation: _ctrl,
+          animation: controller.animCtrl,
           beginOffset: const Offset(0.1, 0),
           child: ExperienceTimeline(isDark: isDark),
         ),

@@ -10,12 +10,10 @@ import 'package:portfolio/widgets/custom_text.dart';
 
 class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
-  final ScrollController scrollController;
 
   const NavbarView({
     super.key,
     required this.scaffoldKey,
-    required this.scrollController,
   });
 
   @override
@@ -63,8 +61,7 @@ class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
                   return NavLinkItem(
                     title: controller.navItems[index],
                     isSelected: controller.selectedIndex.value == index,
-                    onTap: () =>
-                        controller.scrollToSection(index, scrollController),
+                    onTap: () => controller.scrollToSection(index),
                   );
                 }),
               ),

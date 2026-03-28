@@ -8,9 +8,7 @@ import 'package:portfolio/core/controllers/app_controller.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 
 class NavDrawer extends GetView<AppController> {
-  final ScrollController scrollController;
-
-  const NavDrawer({super.key, required this.scrollController});
+  const NavDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +90,7 @@ class NavDrawer extends GetView<AppController> {
                   onTap: () {
                     Navigator.of(context).pop();
                     Future.delayed(const Duration(milliseconds: 300), () {
-                      controller.scrollToSection(index, scrollController);
+                      controller.scrollToSection(index);
                     });
                   },
                 );
