@@ -8,12 +8,16 @@ import 'package:portfolio/core/controllers/app_controller.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 
 class NavDrawer extends GetView<AppController> {
-  const NavDrawer({super.key});
+  final ScrollController scrollController;
+
+  const NavDrawer({super.key, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Drawer(
-      backgroundColor: AppColors.cardBackground,
+      backgroundColor: isDark ? AppColors.darkCard : AppColors.cardBackground,
       child: SafeArea(
         child: Column(
           children: [
@@ -43,16 +47,23 @@ class NavDrawer extends GetView<AppController> {
                   CustomText(
                     text: Strings.portfolio.tr,
                     style: CustomTextStyle.h4,
+                    color: isDark ? AppColors.darkText : null,
                   ),
                   const Spacer(),
                   IconButton(
-                    icon: const Icon(Icons.close),
+                    icon: Icon(
+                      Icons.close,
+                      color: isDark ? AppColors.darkText : AppColors.textPrimary,
+                    ),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
               ),
             ),
-            const Divider(height: 1, color: AppColors.borderLight),
+            Divider(
+              height: 1,
+              color: isDark ? AppColors.darkBorder : AppColors.borderLight,
+            ),
             const SizedBox(height: AppSizes.md),
 
             // Nav items
@@ -65,25 +76,63 @@ class NavDrawer extends GetView<AppController> {
                   title: CustomText(
                     text: controller.navItems[index].tr,
                     style: CustomTextStyle.navLink,
-                    color:
-                        isSelected ? AppColors.primary : AppColors.navLinkText,
+                    color: isSelected
+                        ? AppColors.primary
+                        : (isDark
+                            ? AppColors.darkTextSecondary
+                            : AppColors.navLinkText),
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                     fontSize: 16,
                   ),
                   selected: isSelected,
-                  selectedTileColor: AppColors.primary.withValues(alpha: 0.05),
+                  selectedTileColor: AppColors.primary.withValues(alpha: 0.08),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppSizes.radiusSm),
                   ),
                   onTap: () {
-                    controller.setSelectedIndex(index);
                     Navigator.of(context).pop();
+                    Future.delayed(const Duration(milliseconds: 300), () {
+                      controller.scrollToSection(index, scrollController);
+                    });
                   },
                 );
               });
             }),
 
             const Spacer(),
+
+            // Theme toggle
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+              child: Row(
+                children: [
+                  Obx(() => Icon(
+                        controller.isDarkMode.value
+                            ? Icons.light_mode_outlined
+                            : Icons.dark_mode_outlined,
+                        color: isDark
+                            ? AppColors.darkTextSecondary
+                            : AppColors.navLinkText,
+                        size: 20,
+                      )),
+                  const SizedBox(width: AppSizes.sm),
+                  CustomText(
+                    text: 'Toggle theme',
+                    style: CustomTextStyle.bodyMedium,
+                    color: isDark
+                        ? AppColors.darkTextSecondary
+                        : AppColors.navLinkText,
+                    fontSize: 14,
+                  ),
+                  const Spacer(),
+                  Obx(() => Switch(
+                        value: controller.isDarkMode.value,
+                        activeColor: AppColors.primary,
+                        onChanged: (_) => controller.toggleTheme(),
+                      )),
+                ],
+              ),
+            ),
 
             // Hire Me button
             Padding(

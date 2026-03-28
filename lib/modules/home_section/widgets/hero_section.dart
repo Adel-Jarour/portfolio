@@ -3,69 +3,128 @@ import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
+import 'package:portfolio/widgets/animated_fade_slide.dart';
 import 'package:portfolio/widgets/custom_button.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 import 'package:portfolio/localization/strings.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
-class HeroSection extends StatelessWidget {
-  const HeroSection({super.key});
+class HeroSection extends StatefulWidget {
+  final Key? sectionKey;
+  const HeroSection({super.key, this.sectionKey});
+
+  @override
+  State<HeroSection> createState() => _HeroSectionState();
+}
+
+class _HeroSectionState extends State<HeroSection>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  bool _animated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    // Home section is always visible on load – animate immediately
+    WidgetsBinding.instance.addPostFrameCallback((_) => _ctrl.forward());
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  void _onVisibilityChanged(VisibilityInfo info) {
+    if (!_animated && info.visibleFraction > 0.1) {
+      _animated = true;
+      _ctrl.forward();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth <= AppSizes.mobileBreakpoint;
     final isTablet = screenWidth <= AppSizes.tabletBreakpoint && !isMobile;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      width: double.infinity,
-      color: AppColors.background,
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile
-            ? AppSizes.pagePaddingMobile
-            : isTablet
-                ? AppSizes.pagePaddingTablet
-                : AppSizes.pagePaddingDesktop,
-        vertical: isMobile ? AppSizes.xxl : AppSizes.xxxl + 20,
-      ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: AppSizes.maxContentWidth),
-          child: isMobile || isTablet
-              ? _buildMobileLayout(context, isMobile)
-              : _buildDesktopLayout(context),
+    return VisibilityDetector(
+      key: const Key('hero-section'),
+      onVisibilityChanged: _onVisibilityChanged,
+      child: Container(
+        key: widget.sectionKey,
+        width: double.infinity,
+        color: isDark ? AppColors.darkBackground : AppColors.background,
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile
+              ? AppSizes.pagePaddingMobile
+              : isTablet
+                  ? AppSizes.pagePaddingTablet
+                  : AppSizes.pagePaddingDesktop,
+          vertical: isMobile ? AppSizes.xxl : AppSizes.xxxl + 20,
+        ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints:
+                const BoxConstraints(maxWidth: AppSizes.maxContentWidth),
+            child: isMobile || isTablet
+                ? _buildMobileLayout(isMobile, isDark)
+                : _buildDesktopLayout(isDark),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildDesktopLayout(BuildContext context) {
+  Widget _buildDesktopLayout(bool isDark) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           flex: 5,
-          child: _buildTextContent(context, false),
+          child: AnimatedFadeSlide(
+            animation: _ctrl,
+            beginOffset: const Offset(-0.12, 0),
+            child: _buildTextContent(false, isDark),
+          ),
         ),
         const SizedBox(width: AppSizes.xxl),
         Expanded(
           flex: 5,
-          child: _buildProfileImage(context, false),
+          child: AnimatedFadeSlide(
+            animation: _ctrl,
+            beginOffset: const Offset(0.12, 0),
+            child: _buildProfileImage(false),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildMobileLayout(BuildContext context, bool isMobile) {
+  Widget _buildMobileLayout(bool isMobile, bool isDark) {
     return Column(
       children: [
-        _buildTextContent(context, true),
+        AnimatedFadeSlide(
+          animation: _ctrl,
+          beginOffset: const Offset(-0.1, 0),
+          child: _buildTextContent(true, isDark),
+        ),
         const SizedBox(height: AppSizes.xl),
-        _buildProfileImage(context, true),
+        AnimatedFadeSlide(
+          animation: _ctrl,
+          beginOffset: const Offset(0.1, 0),
+          child: _buildProfileImage(true),
+        ),
       ],
     );
   }
 
-  Widget _buildTextContent(BuildContext context, bool isMobile) {
+  Widget _buildTextContent(bool isMobile, bool isDark) {
     return Column(
       crossAxisAlignment:
           isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
@@ -77,16 +136,16 @@ class HeroSection extends StatelessWidget {
             vertical: AppSizes.sm,
           ),
           decoration: BoxDecoration(
-            color: AppColors.badgeBg,
+            color: isDark ? AppColors.darkBadgeBg : AppColors.badgeBg,
             borderRadius: BorderRadius.circular(AppSizes.radiusFull),
             border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.15),
+              color: AppColors.primary.withValues(alpha: 0.25),
             ),
           ),
           child: CustomText(
             text: Strings.availableForProjects.tr,
             style: CustomTextStyle.caption,
-            color: AppColors.badgeText,
+            color: isDark ? AppColors.darkBadgeText : AppColors.badgeText,
             fontSize: 11,
           ),
         ),
@@ -101,6 +160,7 @@ class HeroSection extends StatelessWidget {
                 text: Strings.heroTitle1.tr,
                 style: AppTextStyles.h1.copyWith(
                   fontSize: isMobile ? 36 : 52,
+                  color: isDark ? AppColors.darkText : null,
                 ),
               ),
               TextSpan(
@@ -114,6 +174,7 @@ class HeroSection extends StatelessWidget {
                 text: Strings.heroTitle2.tr,
                 style: AppTextStyles.h1.copyWith(
                   fontSize: isMobile ? 36 : 52,
+                  color: isDark ? AppColors.darkText : null,
                 ),
               ),
             ],
@@ -129,12 +190,13 @@ class HeroSection extends StatelessWidget {
           child: CustomText(
             text: Strings.heroSubtitle.tr,
             style: CustomTextStyle.bodyMedium,
+            color: isDark ? AppColors.darkTextSecondary : null,
             textAlign: isMobile ? TextAlign.center : TextAlign.left,
           ),
         ),
         const SizedBox(height: AppSizes.xl),
 
-        // Buttons – Row side by side, intrinsic width
+        // Buttons
         Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment:
@@ -157,7 +219,7 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileImage(BuildContext context, bool isMobile) {
+  Widget _buildProfileImage(bool isMobile) {
     final imageSize = isMobile ? 280.0 : 420.0;
 
     return Center(
@@ -169,10 +231,7 @@ class HeroSection extends StatelessWidget {
           gradient: const LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFF5E6DA),
-              Color(0xFFEED9CC),
-            ],
+            colors: [Color(0xFFF5E6DA), Color(0xFFEED9CC)],
           ),
           boxShadow: [
             BoxShadow(

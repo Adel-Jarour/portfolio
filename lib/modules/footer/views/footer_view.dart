@@ -13,10 +13,11 @@ class FooterView extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth <= AppSizes.mobileBreakpoint;
     final isTablet = screenWidth <= AppSizes.tabletBreakpoint && !isMobile;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       width: double.infinity,
-      color: AppColors.cardBackground,
+      color: isDark ? AppColors.darkCard : AppColors.cardBackground,
       padding: EdgeInsets.symmetric(
         horizontal: isMobile
             ? AppSizes.pagePaddingMobile
@@ -30,14 +31,21 @@ class FooterView extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: AppSizes.maxContentWidth),
           child: Column(
             children: [
-              isMobile ? _buildMobileTop() : _buildDesktopTop(),
+              isMobile
+                  ? _buildMobileTop(isDark)
+                  : _buildDesktopTop(isDark),
               const SizedBox(height: AppSizes.xl),
-              const Divider(color: AppColors.borderLight, height: 1),
+              Divider(
+                color: isDark ? AppColors.darkBorder : AppColors.borderLight,
+                height: 1,
+              ),
               const SizedBox(height: AppSizes.xl),
               CustomText(
                 text: Strings.footerCopyright.tr,
                 style: CustomTextStyle.bodySmall,
-                color: AppColors.textSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
                 textAlign: TextAlign.center,
               ),
             ],
@@ -47,30 +55,30 @@ class FooterView extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopTop() {
+  Widget _buildDesktopTop(bool isDark) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildLogo(),
-        _buildLinks(),
-        _buildSocialIcons(),
+        _buildLogo(isDark),
+        _buildLinks(isDark: isDark),
+        _buildSocialIcons(isDark),
       ],
     );
   }
 
-  Widget _buildMobileTop() {
+  Widget _buildMobileTop(bool isDark) {
     return Column(
       children: [
-        _buildLogo(),
+        _buildLogo(isDark),
         const SizedBox(height: AppSizes.xl),
-        _buildLinks(isMobile: true),
+        _buildLinks(isMobile: true, isDark: isDark),
         const SizedBox(height: AppSizes.xl),
-        _buildSocialIcons(),
+        _buildSocialIcons(isDark),
       ],
     );
   }
 
-  Widget _buildLogo() {
+  Widget _buildLogo(bool isDark) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -92,16 +100,17 @@ class FooterView extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSizes.sm),
-        const CustomText(
+        CustomText(
           text: 'Portfolio',
           style: CustomTextStyle.h4,
           fontSize: 18,
+          color: isDark ? AppColors.darkText : null,
         ),
       ],
     );
   }
 
-  Widget _buildLinks({bool isMobile = false}) {
+  Widget _buildLinks({bool isMobile = false, bool isDark = false}) {
     final links = [
       Strings.privacyPolicy.tr,
       Strings.termsOfService.tr,
@@ -114,7 +123,8 @@ class FooterView extends StatelessWidget {
         spacing: AppSizes.lg,
         runSpacing: AppSizes.md,
         alignment: WrapAlignment.center,
-        children: links.map((link) => _buildLinkItem(link)).toList(),
+        children:
+            links.map((link) => _buildLinkItem(link, isDark: isDark)).toList(),
       );
     }
 
@@ -126,43 +136,43 @@ class FooterView extends StatelessWidget {
           padding: EdgeInsets.only(
             right: index < links.length - 1 ? AppSizes.xl : 0,
           ),
-          child: _buildLinkItem(links[index]),
+          child: _buildLinkItem(links[index], isDark: isDark),
         ),
       ),
     );
   }
 
-  Widget _buildLinkItem(String text) {
+  Widget _buildLinkItem(String text, {bool isDark = false}) {
     return InkWell(
       onTap: () {},
       child: CustomText(
         text: text,
         style: CustomTextStyle.bodyMedium,
-        color: AppColors.textSecondary,
+        color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
         fontWeight: FontWeight.w500,
       ),
     );
   }
 
-  Widget _buildSocialIcons() {
+  Widget _buildSocialIcons(bool isDark) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildIcon(Icons.share_outlined),
+        _buildIcon(Icons.share_outlined, isDark),
         const SizedBox(width: AppSizes.md),
-        _buildIcon(Icons.rss_feed_outlined),
+        _buildIcon(Icons.rss_feed_outlined, isDark),
         const SizedBox(width: AppSizes.md),
-        _buildIcon(Icons.star_border_outlined),
+        _buildIcon(Icons.star_border_outlined, isDark),
       ],
     );
   }
 
-  Widget _buildIcon(IconData icon) {
+  Widget _buildIcon(IconData icon, bool isDark) {
     return InkWell(
       onTap: () {},
       child: Icon(
         icon,
-        color: AppColors.textSecondary,
+        color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
         size: 20,
       ),
     );

@@ -10,8 +10,13 @@ import 'package:portfolio/widgets/custom_text.dart';
 
 class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
+  final ScrollController scrollController;
 
-  const NavbarView({super.key, required this.scaffoldKey});
+  const NavbarView({
+    super.key,
+    required this.scaffoldKey,
+    required this.scrollController,
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(AppSizes.navbarHeight);
@@ -22,13 +27,17 @@ class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = _isMobile(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       height: AppSizes.navbarHeight,
       decoration: BoxDecoration(
-        color: AppColors.navbarBg,
-        border: const Border(
-          bottom: BorderSide(color: AppColors.borderLight, width: 1),
+        color: isDark ? AppColors.darkNavbar : AppColors.navbarBg,
+        border: Border(
+          bottom: BorderSide(
+            color: isDark ? AppColors.darkBorder : AppColors.borderLight,
+            width: 1,
+          ),
         ),
       ),
       padding: EdgeInsets.symmetric(
@@ -37,12 +46,14 @@ class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
       ),
       child: Row(
         children: [
-          _buildLogo(),
+          _buildLogo(isDark),
           const Spacer(),
           if (isMobile)
             IconButton(
-              icon:
-                  const Icon(Icons.menu_rounded, color: AppColors.textPrimary),
+              icon: Icon(
+                Icons.menu_rounded,
+                color: isDark ? AppColors.darkText : AppColors.textPrimary,
+              ),
               onPressed: () => scaffoldKey.currentState?.openEndDrawer(),
             )
           else ...[
@@ -52,7 +63,8 @@ class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
                   return NavLinkItem(
                     title: controller.navItems[index],
                     isSelected: controller.selectedIndex.value == index,
-                    onTap: () => controller.setSelectedIndex(index),
+                    onTap: () =>
+                        controller.scrollToSection(index, scrollController),
                   );
                 }),
               ),
@@ -63,9 +75,9 @@ class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
               icon: Obx(
                 () => Icon(
                   controller.isDarkMode.value
-                      ? Icons.dark_mode_outlined
-                      : Icons.light_mode_outlined,
-                  color: AppColors.navLinkText,
+                      ? Icons.light_mode_outlined
+                      : Icons.dark_mode_outlined,
+                  color: isDark ? AppColors.darkText : AppColors.navLinkText,
                   size: 22,
                 ),
               ),
@@ -82,7 +94,7 @@ class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
     );
   }
 
-  Widget _buildLogo() {
+  Widget _buildLogo(bool isDark) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -108,6 +120,7 @@ class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
           text: 'Portfolio',
           style: CustomTextStyle.h4,
           fontSize: 18,
+          color: isDark ? AppColors.darkText : null,
         ),
       ],
     );

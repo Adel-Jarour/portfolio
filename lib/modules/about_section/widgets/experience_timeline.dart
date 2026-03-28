@@ -6,7 +6,8 @@ import 'package:portfolio/localization/strings.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 
 class ExperienceTimeline extends StatelessWidget {
-  const ExperienceTimeline({super.key});
+  final bool isDark;
+  const ExperienceTimeline({super.key, this.isDark = false});
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +46,14 @@ class ExperienceTimeline extends StatelessWidget {
                 width: 48,
                 child: Column(
                   children: [
-                    // Icon circle
                     Container(
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1),
+                        color: AppColors.primary.withValues(alpha: 0.12),
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: AppColors.primary.withValues(alpha: 0.3),
+                          color: AppColors.primary.withValues(alpha: 0.35),
                           width: 2,
                         ),
                       ),
@@ -63,7 +63,6 @@ class ExperienceTimeline extends StatelessWidget {
                         color: AppColors.primary,
                       ),
                     ),
-                    // Vertical connector line
                     if (!isLast)
                       Expanded(
                         child: Container(
@@ -88,6 +87,7 @@ class ExperienceTimeline extends StatelessWidget {
                         text: item.titleKey.tr,
                         style: CustomTextStyle.h4,
                         fontSize: 17,
+                        color: isDark ? AppColors.darkText : null,
                       ),
                       const SizedBox(height: 4),
                       CustomText(
@@ -100,7 +100,9 @@ class ExperienceTimeline extends StatelessWidget {
                       CustomText(
                         text: item.descKey.tr,
                         style: CustomTextStyle.bodySmall,
-                        color: AppColors.textSecondary,
+                        color: isDark
+                            ? AppColors.darkTextSecondary
+                            : AppColors.textSecondary,
                       ),
                     ],
                   ),

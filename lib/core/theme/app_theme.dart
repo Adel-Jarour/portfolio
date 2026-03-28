@@ -13,6 +13,8 @@ class AppTheme {
       primary: AppColors.primary,
       secondary: AppColors.primaryLight,
       surface: AppColors.cardBackground,
+      onSurface: AppColors.textPrimary,
+      onPrimary: AppColors.textWhite,
     ),
     textTheme: GoogleFonts.interTextTheme(),
     appBarTheme: const AppBarTheme(
@@ -20,6 +22,7 @@ class AppTheme {
       elevation: 0,
       iconTheme: IconThemeData(color: AppColors.textPrimary),
     ),
+    dividerColor: AppColors.borderLight,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -30,13 +33,17 @@ class AppTheme {
       primary: AppColors.primary,
       secondary: AppColors.primaryLight,
       surface: AppColors.darkCard,
+      onSurface: AppColors.darkText,
+      onPrimary: AppColors.textWhite,
     ),
     textTheme: GoogleFonts.interTextTheme(
       ThemeData.dark().textTheme,
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.darkBackground,
+      backgroundColor: AppColors.darkNavbar,
       elevation: 0,
+      iconTheme: IconThemeData(color: AppColors.darkText),
     ),
+    dividerColor: AppColors.darkBorder,
   );
 }

@@ -6,7 +6,8 @@ import 'package:portfolio/localization/strings.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 
 class StatsRow extends StatelessWidget {
-  const StatsRow({super.key});
+  final bool isDark;
+  const StatsRow({super.key, this.isDark = false});
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +36,16 @@ class StatsRow extends StatelessWidget {
                 style: CustomTextStyle.h2,
                 fontSize: 32,
                 fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
+                color: isDark ? AppColors.darkText : AppColors.textPrimary,
               ),
               const SizedBox(height: 4),
               CustomText(
                 text: stat.labelKey.tr,
                 style: CustomTextStyle.caption,
                 fontSize: 10,
-                color: AppColors.textSecondary,
+                color: isDark
+                    ? AppColors.darkTextSecondary
+                    : AppColors.textSecondary,
                 letterSpacing: 1.5,
               ),
             ],
