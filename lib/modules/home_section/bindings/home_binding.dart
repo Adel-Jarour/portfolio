@@ -9,7 +9,8 @@ import 'package:portfolio/modules/skills_section/controllers/skills_anim_control
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<AppController>(() => AppController());
+    // AppController is already registered in main()
+    // Get.lazyPut<AppController>(() => AppController());
     Get.lazyPut<HeroAnimController>(() => HeroAnimController());
     Get.lazyPut<AboutAnimController>(() => AboutAnimController());
     Get.lazyPut<SkillsAnimController>(() => SkillsAnimController());

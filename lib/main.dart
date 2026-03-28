@@ -7,6 +7,8 @@ import 'package:portfolio/routes/app_pages.dart';
 import 'package:portfolio/routes/app_routes.dart';
 
 void main() {
+  // Pre-register AppController so it's available before GetMaterialApp builds
+  Get.put(AppController());
   runApp(const MyApp());
 }
 
@@ -15,21 +17,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AppController>(
-      init: AppController(),
-      builder: (ctrl) => GetMaterialApp(
-        title: 'Portfolio',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ctrl.isDarkMode.value ? ThemeMode.dark : ThemeMode.light,
-        translations: AppTranslations(),
-        locale: const Locale('en', 'US'),
-        fallbackLocale: const Locale('en', 'US'),
-        initialRoute: AppRoutes.home,
-        getPages: AppPages.pages,
-      ),
+    return GetMaterialApp(
+      title: 'Portfolio',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light,
+      translations: AppTranslations(),
+      locale: const Locale('en', 'US'),
+      fallbackLocale: const Locale('en', 'US'),
+      initialRoute: AppRoutes.home,
+      getPages: AppPages.pages,
     );
   }
 }
-

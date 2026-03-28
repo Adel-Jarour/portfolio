@@ -120,19 +120,22 @@ class SkillsSection extends GetView<SkillsAnimController> {
                   ),
                 )
               else
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(
-                    cards.length,
-                    (index) => Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          right: index < cards.length - 1 ? AppSizes.xl : 0,
-                        ),
-                        child: AnimatedFadeSlide(
-                          animation: controller.cardCtrls[index],
-                          beginOffset: const Offset(0, 0.12),
-                          child: cards[index],
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: List.generate(
+                      cards.length,
+                      (index) => Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            right:
+                                index < cards.length - 1 ? AppSizes.xl : 0,
+                          ),
+                          child: AnimatedFadeSlide(
+                            animation: controller.cardCtrls[index],
+                            beginOffset: const Offset(0, 0.12),
+                            child: cards[index],
+                          ),
                         ),
                       ),
                     ),
