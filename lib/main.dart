@@ -1,15 +1,41 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/core/controllers/app_controller.dart';
 import 'package:portfolio/core/theme/app_theme.dart';
+import 'package:portfolio/firebase_options.dart';
 import 'package:portfolio/localization/translations.dart';
 import 'package:portfolio/routes/app_pages.dart';
 import 'package:portfolio/routes/app_routes.dart';
 
-void main() {
-  // Pre-register AppController so it's available before GetMaterialApp builds
-  Get.put(AppController());
-  runApp(const MyApp());
+void main() async {
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    // Log any Flutter framework errors to the browser console
+    FlutterError.onError = (details) {
+      FlutterError.presentError(details);
+      print('[FlutterError] ${details.exceptionAsString()}');
+    };
+
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    print('[main] Firebase initialized successfully');
+
+    Get.put(AppController());
+    runApp(const MyApp());
+  } catch (e, stack) {
+    print('[main] STARTUP CRASH: $e\n$stack');
+    // Show a minimal error page instead of a blank screen
+    runApp(MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('Startup error: $e',
+              style: const TextStyle(color: Colors.red)),
+        ),
+      ),
+    ));
+  }
 }
 
 class MyApp extends StatelessWidget {

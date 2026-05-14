@@ -7,18 +7,24 @@ import 'package:portfolio/widgets/custom_text.dart';
 
 class StatsRow extends StatelessWidget {
   final bool isDark;
-  const StatsRow({super.key, this.isDark = false});
+  final int projects;
+  final int clients;
+  final int yearsExp;
+
+  const StatsRow({
+    super.key,
+    this.isDark = false,
+    this.projects = 0,
+    this.clients = 0,
+    this.yearsExp = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
     final stats = [
-      _StatData(
-          valueKey: Strings.statProjectsValue, labelKey: Strings.statProjects),
-      _StatData(
-          valueKey: Strings.statClientsValue, labelKey: Strings.statClients),
-      _StatData(
-          valueKey: Strings.statExperienceValue,
-          labelKey: Strings.statExperience),
+      _StatData(value: projects, labelKey: Strings.statProjects),
+      _StatData(value: clients, labelKey: Strings.statClients),
+      _StatData(value: yearsExp, labelKey: Strings.statExperience),
     ];
 
     return Row(
@@ -32,7 +38,7 @@ class StatsRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomText(
-                text: stat.valueKey.tr,
+                text: '${stat.value}+',
                 style: CustomTextStyle.h2,
                 fontSize: 32,
                 fontWeight: FontWeight.w800,
@@ -57,8 +63,8 @@ class StatsRow extends StatelessWidget {
 }
 
 class _StatData {
-  final String valueKey;
+  final int value;
   final String labelKey;
 
-  const _StatData({required this.valueKey, required this.labelKey});
+  const _StatData({required this.value, required this.labelKey});
 }

@@ -389,8 +389,8 @@ class FooterView extends GetView<AppController> {
 
   // ─── Bottom Rows ────────────────────────────────────────────────────────
   Widget _buildBottomDesktop(Color textColorSecondary, bool isDark) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Wrap(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         CustomText(
           text: "© 2026 Adel Jarour. All rights reserved.",

@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/widgets/custom_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProjectCard extends StatefulWidget {
-  final String imageUrl;
+  final String title;
   final String category;
   final String year;
-  final String title;
   final String description;
   final List<String> technologies;
+  final String? codeUrl;
   final bool isDark;
 
   const ProjectCard({
     super.key,
-    required this.imageUrl,
+    required this.title,
     required this.category,
     required this.year,
-    required this.title,
     required this.description,
     required this.technologies,
+    this.codeUrl,
     this.isDark = false,
   });
 
@@ -30,9 +31,20 @@ class ProjectCard extends StatefulWidget {
 class _ProjectCardState extends State<ProjectCard> {
   bool _isHovered = false;
 
+  Future<void> _launchUrl() async {
+    final raw = widget.codeUrl;
+    if (raw == null || raw.isEmpty) return;
+    final uri = Uri.tryParse(raw);
+    if (uri == null) return;
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = widget.isDark;
+    final hasLink = widget.codeUrl?.isNotEmpty == true;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -40,8 +52,7 @@ class _ProjectCardState extends State<ProjectCard> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
-        transform: Matrix4.identity()
-          ..scale(_isHovered ? 1.02 : 1.0),
+        transform: Matrix4.identity()..scale(_isHovered ? 1.02 : 1.0),
         transformAlignment: Alignment.center,
         decoration: BoxDecoration(
           color: isDark ? AppColors.darkCard : AppColors.cardBackground,
@@ -73,9 +84,7 @@ class _ProjectCardState extends State<ProjectCard> {
               child: Container(
                 height: 240,
                 width: double.infinity,
-                color: isDark
-                    ? AppColors.darkHero
-                    : AppColors.heroBackground,
+                color: isDark ? AppColors.darkHero : AppColors.heroBackground,
                 child: Icon(
                   Icons.image_outlined,
                   size: 48,
@@ -91,9 +100,14 @@ class _ProjectCardState extends State<ProjectCard> {
                   // Badges
                   Row(
                     children: [
-                      _buildBadge(widget.category, outline: false, isDark: isDark),
-                      const SizedBox(width: AppSizes.sm),
-                      _buildBadge(widget.year, outline: true, isDark: isDark),
+                      if (widget.category.isNotEmpty)
+                        _buildBadge(widget.category,
+                            outline: false, isDark: isDark),
+                      if (widget.category.isNotEmpty && widget.year.isNotEmpty)
+                        const SizedBox(width: AppSizes.sm),
+                      if (widget.year.isNotEmpty)
+                        _buildBadge(widget.year,
+                            outline: true, isDark: isDark),
                     ],
                   ),
                   const SizedBox(height: AppSizes.md),
@@ -120,40 +134,43 @@ class _ProjectCardState extends State<ProjectCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: CustomText(
-                          text: widget.technologies.join('   '),
-                          style: CustomTextStyle.caption,
-                          color: isDark
-                              ? AppColors.darkTextSecondary
-                              : AppColors.textSecondary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _isHovered
-                              ? AppColors.primary
-                              : Colors.transparent,
-                          border: Border.all(
-                            color: _isHovered
-                                ? AppColors.primary
-                                : (isDark
-                                    ? AppColors.darkBorder
-                                    : AppColors.borderLight),
+                      if (widget.technologies.isNotEmpty)
+                        Expanded(
+                          child: CustomText(
+                            text: widget.technologies.join('   '),
+                            style: CustomTextStyle.caption,
+                            color: isDark
+                                ? AppColors.darkTextSecondary
+                                : AppColors.textSecondary,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        child: Icon(
-                          Icons.arrow_outward_rounded,
-                          color: _isHovered
-                              ? Colors.white
-                              : AppColors.primary,
-                          size: 18,
+                      if (hasLink)
+                        GestureDetector(
+                          onTap: _launchUrl,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 250),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _isHovered
+                                  ? AppColors.primary
+                                  : Colors.transparent,
+                              border: Border.all(
+                                color: _isHovered
+                                    ? AppColors.primary
+                                    : (isDark
+                                        ? AppColors.darkBorder
+                                        : AppColors.borderLight),
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.arrow_outward_rounded,
+                              color: _isHovered ? Colors.white : AppColors.primary,
+                              size: 18,
+                            ),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ],

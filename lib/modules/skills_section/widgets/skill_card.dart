@@ -37,8 +37,10 @@ class SkillCard extends StatelessWidget {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Category icon
           Container(
             width: 48,
             height: 48,
@@ -49,6 +51,7 @@ class SkillCard extends StatelessWidget {
             child: Icon(icon, color: AppColors.primary, size: 24),
           ),
           const SizedBox(height: AppSizes.lg),
+          // Category title
           CustomText(
             text: title,
             style: CustomTextStyle.h4,
@@ -57,11 +60,12 @@ class SkillCard extends StatelessWidget {
             color: isDark ? AppColors.darkText : null,
           ),
           const SizedBox(height: AppSizes.lg),
+          // Skill tags (pill badges)
           Wrap(
             spacing: AppSizes.sm,
             runSpacing: AppSizes.sm,
             children: tags
-                .map((tag) => _BuildTag(text: tag, isDark: isDark))
+                .map((tag) => _SkillTag(text: tag, isDark: isDark))
                 .toList(),
           ),
         ],
@@ -70,11 +74,11 @@ class SkillCard extends StatelessWidget {
   }
 }
 
-class _BuildTag extends StatelessWidget {
+class _SkillTag extends StatelessWidget {
   final String text;
   final bool isDark;
 
-  const _BuildTag({required this.text, this.isDark = false});
+  const _SkillTag({required this.text, this.isDark = false});
 
   @override
   Widget build(BuildContext context) {

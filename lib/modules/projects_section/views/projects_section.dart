@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/localization/strings.dart';
-import 'package:portfolio/modules/projects_section/controllers/projects_anim_controller.dart';
+import 'package:portfolio/modules/projects_section/controllers/projects_controller.dart';
 import 'package:portfolio/modules/projects_section/widgets/project_card.dart';
 import 'package:portfolio/widgets/animated_fade_slide.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class ProjectsSection extends GetView<ProjectsAnimController> {
+class ProjectsSection extends GetView<ProjectsController> {
   final Key? sectionKey;
   const ProjectsSection({super.key, this.sectionKey});
 
@@ -42,7 +42,7 @@ class ProjectsSection extends GetView<ProjectsAnimController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header Row
+                // ── Header ─────────────────────────────────────────────────
                 AnimatedFadeSlide(
                   animation: controller.headerCtrl,
                   beginOffset: const Offset(0, 0.08),
@@ -67,43 +67,69 @@ class ProjectsSection extends GetView<ProjectsAnimController> {
 
                 const SizedBox(height: AppSizes.xxl),
 
-                // Cards
-                if (isMobile || isTablet)
-                  Column(
-                    children: [
-                      AnimatedFadeSlide(
-                        animation: controller.card1Ctrl,
-                        beginOffset: const Offset(0, 0.12),
-                        child: _buildCard1(isDark),
+                // ── Cards (reactive) ────────────────────────────────────────
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return _buildSkeleton(isMobile || isTablet, isDark);
+                  }
+                  if (controller.hasError.value) {
+                    return _buildError(isDark);
+                  }
+
+                  final projects = controller.projects;
+                  if (projects.isEmpty) return const SizedBox.shrink();
+
+                  final animations = [
+                    controller.card1Ctrl,
+                    controller.card2Ctrl,
+                  ];
+
+                  final cards = List.generate(
+                    projects.length,
+                    (i) => AnimatedFadeSlide(
+                      animation: i < animations.length
+                          ? animations[i]
+                          : animations.last,
+                      beginOffset: const Offset(0, 0.12),
+                      child: ProjectCard(
+                        key: ValueKey(projects[i].id),
+                        title: projects[i].name,
+                        category: projects[i].status,
+                        year: '',
+                        description: projects[i].description,
+                        technologies: const [],
+                        codeUrl: projects[i].code,
+                        isDark: isDark,
                       ),
-                      const SizedBox(height: AppSizes.xl),
-                      AnimatedFadeSlide(
-                        animation: controller.card2Ctrl,
-                        beginOffset: const Offset(0, 0.12),
-                        child: _buildCard2(isDark),
-                      ),
-                    ],
-                  )
-                else
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AnimatedFadeSlide(
-                          animation: controller.card1Ctrl,
-                          beginOffset: const Offset(0, 0.12),
-                          child: _buildCard1(isDark),
+                    ),
+                  );
+
+                  if (isMobile || isTablet) {
+                    return Column(
+                      children: List.generate(
+                        cards.length,
+                        (i) => Padding(
+                          padding: EdgeInsets.only(
+                              bottom: i < cards.length - 1 ? AppSizes.xl : 0),
+                          child: cards[i],
                         ),
                       ),
-                      const SizedBox(width: AppSizes.xxl),
-                      Expanded(
-                        child: AnimatedFadeSlide(
-                          animation: controller.card2Ctrl,
-                          beginOffset: const Offset(0, 0.12),
-                          child: _buildCard2(isDark),
+                    );
+                  }
+
+                  return Row(
+                    children: List.generate(
+                      cards.length,
+                      (i) => Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              right: i < cards.length - 1 ? AppSizes.xxl : 0),
+                          child: cards[i],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -125,8 +151,7 @@ class ProjectsSection extends GetView<ProjectsAnimController> {
         CustomText(
           text: Strings.selectedWorksSubtitle.tr,
           style: CustomTextStyle.bodyMedium,
-          color:
-              isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
+          color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
         ),
       ],
     );
@@ -154,27 +179,49 @@ class ProjectsSection extends GetView<ProjectsAnimController> {
     );
   }
 
-  Widget _buildCard1(bool isDark) {
-    return ProjectCard(
-      imageUrl: '',
-      category: Strings.project1Category.tr,
-      year: Strings.project1Year.tr,
-      title: Strings.project1Title.tr,
-      description: Strings.project1Desc.tr,
-      technologies: const ['React', 'D3.js', 'Supabase'],
-      isDark: isDark,
+  Widget _buildSkeleton(bool stacked, bool isDark) {
+    final box = Container(
+      height: 320,
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.darkBorder : AppColors.borderLight,
+        borderRadius: BorderRadius.circular(AppSizes.radiusXl),
+      ),
     );
+    if (stacked) {
+      return Column(children: [
+        box,
+        const SizedBox(height: AppSizes.xl),
+        box,
+      ]);
+    }
+    return Row(children: [
+      Expanded(child: box),
+      const SizedBox(width: AppSizes.xxl),
+      Expanded(child: box),
+    ]);
   }
 
-  Widget _buildCard2(bool isDark) {
-    return ProjectCard(
-      imageUrl: '',
-      category: Strings.project2Category.tr,
-      year: Strings.project2Year.tr,
-      title: Strings.project2Title.tr,
-      description: Strings.project2Desc.tr,
-      technologies: const ['Next.js', 'Shopify', 'Stripe'],
-      isDark: isDark,
+  Widget _buildError(bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 48),
+      child: Column(
+        children: [
+          Icon(Icons.cloud_off_rounded,
+              size: 48,
+              color: isDark
+                  ? AppColors.darkTextSecondary
+                  : AppColors.textSecondary),
+          const SizedBox(height: 16),
+          CustomText(
+            text: 'Could not load projects. Check your connection.',
+            style: CustomTextStyle.bodyMedium,
+            color: isDark
+                ? AppColors.darkTextSecondary
+                : AppColors.textSecondary,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }
