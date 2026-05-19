@@ -75,6 +75,13 @@ class Strings {
   static const String message = 'message';
   static const String messageHint = 'message_hint';
   static const String sendMessage = 'send_message';
+  static const String errorNameRequired = 'error_name_required';
+  static const String errorEmailRequired = 'error_email_required';
+  static const String errorEmailInvalid = 'error_email_invalid';
+  static const String errorSubjectRequired = 'error_subject_required';
+  static const String errorMessageRequired = 'error_message_required';
+  static const String emailSendSuccess = 'email_send_success';
+  static const String emailSendFailure = 'email_send_failure';
 
   // Footer Section
   static const String privacyPolicy = 'privacy_policy';

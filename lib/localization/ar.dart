@@ -85,6 +85,13 @@ const Map<String, String> ar = {
   Strings.message: 'الرسالة',
   Strings.messageHint: 'رسالتك هنا...',
   Strings.sendMessage: 'إرسال الرسالة',
+  Strings.errorNameRequired: 'الاسم مطلوب',
+  Strings.errorEmailRequired: 'البريد الإلكتروني مطلوب',
+  Strings.errorEmailInvalid: 'أدخل عنوان بريد إلكتروني صالح',
+  Strings.errorSubjectRequired: 'الموضوع مطلوب',
+  Strings.errorMessageRequired: 'الرسالة مطلوبة',
+  Strings.emailSendSuccess: 'تم إرسال رسالتك بنجاح!',
+  Strings.emailSendFailure: 'فشل إرسال الرسالة. يرجى المحاولة مرة أخرى.',
 
   // Footer Section
   Strings.privacyPolicy: 'سياسة الخصوصية',

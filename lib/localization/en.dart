@@ -87,6 +87,13 @@ const Map<String, String> en = {
   Strings.message: 'Message',
   Strings.messageHint: 'Your message here...',
   Strings.sendMessage: 'Send Message',
+  Strings.errorNameRequired: 'Name is required',
+  Strings.errorEmailRequired: 'Email is required',
+  Strings.errorEmailInvalid: 'Enter a valid email address',
+  Strings.errorSubjectRequired: 'Subject is required',
+  Strings.errorMessageRequired: 'Message is required',
+  Strings.emailSendSuccess: 'Your message has been sent successfully!',
+  Strings.emailSendFailure: 'Failed to send the message. Please try again.',
 
   // Footer Section
   Strings.privacyPolicy: 'Privacy Policy',

@@ -145,7 +145,16 @@ class ContactSection extends GetView<ContactAnimController> {
                 width: 250,
                 icon: Icons.description_outlined,
                 height: 48,
-                onPressed: () {},
+                onPressed: () async {
+                  final Uri cvUrl = Uri.parse(
+                      'https://drive.google.com/uc?export=download&id=1AOpj4vGfNJmmaS0r3TtDzbtRsMuntQhL');
+
+                  if (await canLaunchUrl(cvUrl)) {
+                    await launchUrl(cvUrl);
+                  } else {
+                    print('Could not launch $cvUrl');
+                  }
+                },
               ),
               SizedBox(
                 height: AppSizes.md,
@@ -234,22 +243,6 @@ class ContactSection extends GetView<ContactAnimController> {
   }
 
   Widget _buildIconButton(String icon, bool isDark, {VoidCallback? onTap}) {
-    // return GestureDetector(
-    //   onTap: onTap,
-    //   child: Container(
-    //     width: 30,
-    //     height: 30,
-    //     decoration: BoxDecoration(
-    //       color: isDark ? AppColors.darkCard : AppColors.cardBackground,
-    //       borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-    //     ),
-    //     child: Image.asset(
-    //       icon,
-    //       color: AppColors.primary,
-    //     ),
-    //   ),
-    // );
-
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -286,58 +279,102 @@ class ContactSection extends GetView<ContactAnimController> {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (isMobile) ...[
+      child: Form(
+        key: controller.formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (isMobile) ...[
+              CustomTextField(
+                controller: controller.nameController,
+                labelText: Strings.fullName.tr,
+                hintText: Strings.fullNameHint.tr,
+                validator: (value) => (value == null || value.trim().isEmpty)
+                    ? Strings.errorNameRequired.tr
+                    : null,
+              ),
+              const SizedBox(height: AppSizes.lg),
+              CustomTextField(
+                controller: controller.emailController,
+                labelText: Strings.emailLabel.tr,
+                hintText: Strings.emailHint.tr,
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return Strings.errorEmailRequired.tr;
+                  }
+                  if (!GetUtils.isEmail(value.trim())) {
+                    return Strings.errorEmailInvalid.tr;
+                  }
+                  return null;
+                },
+              ),
+            ] else
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: CustomTextField(
+                      controller: controller.nameController,
+                      labelText: Strings.fullName.tr,
+                      hintText: Strings.fullNameHint.tr,
+                      validator: (value) =>
+                          (value == null || value.trim().isEmpty)
+                              ? Strings.errorNameRequired.tr
+                              : null,
+                    ),
+                  ),
+                  const SizedBox(width: AppSizes.md),
+                  Expanded(
+                    child: CustomTextField(
+                      controller: controller.emailController,
+                      labelText: Strings.emailLabel.tr,
+                      hintText: Strings.emailHint.tr,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return Strings.errorEmailRequired.tr;
+                        }
+                        if (!GetUtils.isEmail(value.trim())) {
+                          return Strings.errorEmailInvalid.tr;
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            const SizedBox(height: AppSizes.lg),
             CustomTextField(
-              labelText: Strings.fullName.tr,
-              hintText: Strings.fullNameHint.tr,
+              controller: controller.subjectController,
+              labelText: Strings.subject.tr,
+              hintText: Strings.subjectHint.tr,
+              validator: (value) => (value == null || value.trim().isEmpty)
+                  ? Strings.errorSubjectRequired.tr
+                  : null,
             ),
             const SizedBox(height: AppSizes.lg),
             CustomTextField(
-              labelText: Strings.emailLabel.tr,
-              hintText: Strings.emailHint.tr,
+              controller: controller.messageController,
+              labelText: Strings.message.tr,
+              hintText: Strings.messageHint.tr,
+              maxLines: 4,
+              validator: (value) => (value == null || value.trim().isEmpty)
+                  ? Strings.errorMessageRequired.tr
+                  : null,
             ),
-          ] else
-            Row(
-              children: [
-                Expanded(
-                  child: CustomTextField(
-                    labelText: Strings.fullName.tr,
-                    hintText: Strings.fullNameHint.tr,
-                  ),
-                ),
-                const SizedBox(width: AppSizes.md),
-                Expanded(
-                  child: CustomTextField(
-                    labelText: Strings.emailLabel.tr,
-                    hintText: Strings.emailHint.tr,
-                  ),
-                ),
-              ],
+            const SizedBox(height: AppSizes.xl),
+            SizedBox(
+              width: double.infinity,
+              child: Obx(() => CustomButton(
+                    text: Strings.sendMessage.tr,
+                    height: 52,
+                    isLoading: controller.isSending.value,
+                    onPressed: controller.sendEmail,
+                  )),
             ),
-          const SizedBox(height: AppSizes.lg),
-          CustomTextField(
-            labelText: Strings.subject.tr,
-            hintText: Strings.subjectHint.tr,
-          ),
-          const SizedBox(height: AppSizes.lg),
-          CustomTextField(
-            labelText: Strings.message.tr,
-            hintText: Strings.messageHint.tr,
-            maxLines: 4,
-          ),
-          const SizedBox(height: AppSizes.xl),
-          SizedBox(
-            width: double.infinity,
-            child: CustomButton(
-              text: Strings.sendMessage.tr,
-              height: 52,
-              onPressed: () {},
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
