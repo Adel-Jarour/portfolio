@@ -30,8 +30,6 @@ class AppController extends GetxController {
   List<GlobalKey> get sectionKeys =>
       [homeKey, aboutKey, skillsKey, projectsKey, contactKey];
 
-  bool _isProgrammaticScroll = false;
-
   @override
   void onInit() {
     super.onInit();
@@ -42,50 +40,6 @@ class AppController extends GetxController {
     final showBtn = scrollController.offset > 300;
     if (showBtn != showBackToTop.value) {
       showBackToTop.value = showBtn;
-    }
-
-    if (!_isProgrammaticScroll) {
-      _updateSelectedIndexOnScroll();
-    }
-  }
-
-  void _updateSelectedIndexOnScroll() {
-    if (Get.context == null) return;
-    
-    final screenHeight = MediaQuery.of(Get.context!).size.height;
-    final threshold = screenHeight * 0.35; // Trigger scroll highlights when section is 35% down viewport
-
-    int activeIndex = -1;
-    double minDistance = double.infinity;
-
-    for (int i = 0; i < sectionKeys.length; i++) {
-      final key = sectionKeys[i];
-      final context = key.currentContext;
-      if (context != null) {
-        final renderBox = context.findRenderObject() as RenderBox?;
-        if (renderBox != null) {
-          final position = renderBox.localToGlobal(Offset.zero);
-          final dy = position.dy;
-          final height = renderBox.size.height;
-
-          // Check if section is currently active under threshold
-          if (dy <= threshold && dy + height > threshold) {
-            activeIndex = i;
-            break;
-          }
-
-          // Fallback closest tracking
-          final distance = dy.abs();
-          if (distance < minDistance) {
-            minDistance = distance;
-            activeIndex = i;
-          }
-        }
-      }
-    }
-
-    if (activeIndex != -1 && activeIndex != selectedIndex.value) {
-      selectedIndex.value = activeIndex;
     }
   }
 
@@ -101,7 +55,6 @@ class AppController extends GetxController {
   }
 
   void scrollToSection(int index) {
-    _isProgrammaticScroll = true;
     setSelectedIndex(index);
     final key = sectionKeys[index];
     final context = key.currentContext;
@@ -112,25 +65,16 @@ class AppController extends GetxController {
         curve: Curves.easeInOut,
         alignment: 0.0,
       );
-      Future.delayed(const Duration(milliseconds: 650), () {
-        _isProgrammaticScroll = false;
-      });
-    } else {
-      _isProgrammaticScroll = false;
     }
   }
 
   void scrollToTop() {
-    _isProgrammaticScroll = true;
     scrollController.animateTo(
       0,
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInOut,
     );
     setSelectedIndex(0);
-    Future.delayed(const Duration(milliseconds: 650), () {
-      _isProgrammaticScroll = false;
-    });
   }
 
   @override
