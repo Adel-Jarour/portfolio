@@ -11,11 +11,11 @@ const Map<String, String> en = {
 
   // Home Section
   Strings.availableForProjects: 'AVAILABLE FOR PROJECTS',
-  Strings.heroTitle1: 'Crafting ',
-  Strings.heroTitleHighlight: 'Digital',
-  Strings.heroTitle2: '\nExperiences\nwith Precision',
+  Strings.heroTitle1: 'Flutter ',
+  Strings.heroTitleHighlight: 'Dev',
+  Strings.heroTitle2: '\nFast Code\nClean UI',
   Strings.heroSubtitle:
-      'Full-stack developer and UI/UX designer specializing in high-fidelity web solutions that drive business growth and user engagement.',
+      'Flutter specialist turning designs into production-ready iOS and Android apps.',
   Strings.viewPortfolio: 'View Portfolio',
   Strings.professionalProfile: 'Professional Profile',
 
@@ -93,7 +93,23 @@ const Map<String, String> en = {
   Strings.termsOfService: 'Terms of Service',
   Strings.latestWork: 'Latest Work',
   Strings.contact: 'Contact',
-  Strings.footerCopyright: '© 2024 Portfolio. Built with precision and passion.',
+  Strings.footerCopyright:
+      '© 2024 Portfolio. Built with precision and passion.',
+  Strings.footerName: 'Adel Jarour',
+  Strings.footerTitle: 'Flutter Developer',
+  Strings.footerDesc:
+      'Building responsive, performant, and scalable cross-platform mobile & web apps with Flutter.',
+  Strings.quickLinks: 'Quick Links',
+  Strings.footerBuildTogether1: "Let's build something\n",
+  Strings.footerBuildTogether2: 'together',
+  Strings.footerBuildTogetherDesc:
+      "I'm open to freelance projects, full-time opportunities, and exciting collaborations.",
+  Strings.contactMe: 'Contact Me',
+  Strings.footerCopy: '© 2026 Adel Jarour. All rights reserved.',
+  Strings.footerBuiltWith: 'Built with Flutter • GetX • Responsive Design',
+  Strings.footerDesignedCodedWith1: 'Designed & Coded with ',
+  Strings.footerDesignedCodedWith2: ' in Flutter',
+  Strings.badgeResponsive: 'Responsive Design',
 
   // General
   Strings.portfolio: 'Portfolio',

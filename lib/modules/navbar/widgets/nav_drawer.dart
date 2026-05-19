@@ -51,7 +51,8 @@ class NavDrawer extends GetView<AppController> {
                   IconButton(
                     icon: Icon(
                       Icons.close,
-                      color: isDark ? AppColors.darkText : AppColors.textPrimary,
+                      color:
+                          isDark ? AppColors.darkText : AppColors.textPrimary,
                     ),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
@@ -140,7 +141,10 @@ class NavDrawer extends GetView<AppController> {
                 child: CustomButton(
                   text: Strings.hireMe.tr,
                   variant: CustomButtonVariant.filled,
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.back();
+                    controller.scrollToSection(4);
+                  },
                 ),
               ),
             ),

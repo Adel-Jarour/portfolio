@@ -83,7 +83,9 @@ class NavbarView extends GetView<AppController> implements PreferredSizeWidget {
             CustomButton(
               text: Strings.hireMe.tr,
               variant: CustomButtonVariant.filled,
-              onPressed: () {},
+              onPressed: () {
+                controller.scrollToSection(4);
+              },
             ),
           ],
         ],

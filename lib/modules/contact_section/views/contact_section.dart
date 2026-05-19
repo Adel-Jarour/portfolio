@@ -8,6 +8,7 @@ import 'package:portfolio/widgets/animated_fade_slide.dart';
 import 'package:portfolio/widgets/custom_button.dart';
 import 'package:portfolio/widgets/custom_text.dart';
 import 'package:portfolio/widgets/custom_text_field.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ContactSection extends GetView<ContactAnimController> {
@@ -94,55 +95,94 @@ class ContactSection extends GetView<ContactAnimController> {
   }
 
   Widget _buildLeftContent(bool isDark) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomText(
-          text: Strings.contactTitle.tr,
-          style: CustomTextStyle.h2,
-          fontSize: 42,
-          fontWeight: FontWeight.w900,
-          color: isDark ? AppColors.darkText : null,
-        ),
-        const SizedBox(height: AppSizes.lg),
-        CustomText(
-          text: Strings.contactSubtitle.tr,
-          style: CustomTextStyle.bodyMedium,
-          color:
-              isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
-          height: 1.6,
-        ),
-        const SizedBox(height: AppSizes.xxl),
-        _buildInfoItem(
-          icon: Icons.email_outlined,
-          label: Strings.emailMe.tr,
-          value: Strings.emailAddress.tr,
-          isDark: isDark,
-        ),
-        const SizedBox(height: AppSizes.xl),
-        _buildInfoItem(
-          icon: Icons.location_on_outlined,
-          label: Strings.location.tr,
-          value: Strings.locationAddress.tr,
-          isDark: isDark,
-        ),
-        const SizedBox(height: AppSizes.xxl),
-        Wrap(
-          spacing: AppSizes.md,
-          runSpacing: AppSizes.md,
-          children: [
-            CustomButton(
-              text: Strings.downloadResume.tr,
-              icon: Icons.description_outlined,
-              height: 48,
-              onPressed: () {},
-            ),
-            _buildIconButton(Icons.public, isDark),
-            _buildIconButton(Icons.code, isDark),
-          ],
-        ),
-      ],
-    );
+    return Obx(() {
+      final info = controller.portfolioInfo.value;
+      final email = info?.email.isNotEmpty == true
+          ? info!.email
+          : Strings.emailAddress.tr;
+      final location = info?.location.isNotEmpty == true
+          ? info!.location
+          : Strings.locationAddress.tr;
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomText(
+            text: Strings.contactTitle.tr,
+            style: CustomTextStyle.h2,
+            fontSize: 42,
+            fontWeight: FontWeight.w900,
+            color: isDark ? AppColors.darkText : null,
+          ),
+          const SizedBox(height: AppSizes.lg),
+          CustomText(
+            text: Strings.contactSubtitle.tr,
+            style: CustomTextStyle.bodyMedium,
+            color:
+                isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
+            height: 1.6,
+          ),
+          const SizedBox(height: AppSizes.xxl),
+          _buildInfoItem(
+            icon: Icons.email_outlined,
+            label: Strings.emailMe.tr,
+            value: email,
+            isDark: isDark,
+          ),
+          const SizedBox(height: AppSizes.xl),
+          _buildInfoItem(
+            icon: Icons.location_on_outlined,
+            label: Strings.location.tr,
+            value: location,
+            isDark: isDark,
+          ),
+          const SizedBox(height: AppSizes.xxl),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomButton(
+                text: Strings.downloadResume.tr,
+                width: 250,
+                icon: Icons.description_outlined,
+                height: 48,
+                onPressed: () {},
+              ),
+              SizedBox(
+                height: AppSizes.md,
+              ),
+              Row(
+                children: [
+                  _buildIconButton('assets/icons/linkedin.png', isDark,
+                      onTap: () {
+                    final url = info?.linkedin;
+                    if (url != null && url.isNotEmpty) {
+                      _launchUrl(url);
+                    }
+                  }),
+                  SizedBox(
+                    width: AppSizes.md,
+                  ),
+                  _buildIconButton('assets/icons/github.png', isDark,
+                      onTap: () {
+                    final url = info?.github;
+                    if (url != null && url.isNotEmpty) {
+                      _launchUrl(url);
+                    }
+                  }),
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    });
+  }
+
+  Future<void> _launchUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
   }
 
   Widget _buildInfoItem({
@@ -193,21 +233,41 @@ class ContactSection extends GetView<ContactAnimController> {
     );
   }
 
-  Widget _buildIconButton(IconData icon, bool isDark) {
-    return Container(
-      width: 48,
-      height: 48,
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkCard : AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-        border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.borderLight,
-          width: 1.5,
+  Widget _buildIconButton(String icon, bool isDark, {VoidCallback? onTap}) {
+    // return GestureDetector(
+    //   onTap: onTap,
+    //   child: Container(
+    //     width: 30,
+    //     height: 30,
+    //     decoration: BoxDecoration(
+    //       color: isDark ? AppColors.darkCard : AppColors.cardBackground,
+    //       borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+    //     ),
+    //     child: Image.asset(
+    //       icon,
+    //       color: AppColors.primary,
+    //     ),
+    //   ),
+    // );
+
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+            color: AppColors.primaryLight,
+            borderRadius: BorderRadius.circular(AppSizes.radiusSm),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorderLight : AppColors.borderLight,
+            )),
+        alignment: Alignment.center,
+        padding: EdgeInsetsDirectional.all(5),
+        child: Image.asset(
+          icon,
+          color: Colors.white,
+          fit: BoxFit.contain,
         ),
-      ),
-      child: IconButton(
-        icon: Icon(icon, color: AppColors.primary),
-        onPressed: () {},
       ),
     );
   }

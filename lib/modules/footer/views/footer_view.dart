@@ -162,14 +162,14 @@ class FooterView extends GetView<AppController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(
-                  text: 'Adel Jarour',
+                  text: Strings.footerName.tr,
                   style: CustomTextStyle.h3,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: textColorPrimary,
                 ),
                 CustomText(
-                  text: 'Flutter Developer',
+                  text: Strings.footerTitle.tr,
                   style: CustomTextStyle.bodyMedium,
                   color: AppColors.primary,
                   fontWeight: FontWeight.w600,
@@ -183,8 +183,7 @@ class FooterView extends GetView<AppController> {
 
         // Description
         CustomText(
-          text:
-              "Building responsive, performant, and scalable cross-platform mobile & web apps with Flutter.",
+          text: Strings.footerDesc.tr,
           style: CustomTextStyle.bodyMedium,
           color: textColorSecondary,
           height: 1.6,
@@ -199,7 +198,7 @@ class FooterView extends GetView<AppController> {
             _buildBadgeItem('Flutter', Icons.flutter_dash, isDark),
             _buildBadgeItem('Dart', Icons.code, isDark),
             _buildBadgeItem('GetX', Icons.bolt, isDark),
-            _buildBadgeItem('Responsive Design', Icons.devices, isDark),
+            _buildBadgeItem(Strings.badgeResponsive.tr, Icons.devices, isDark),
           ],
         ),
       ],
@@ -242,7 +241,7 @@ class FooterView extends GetView<AppController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomText(
-          text: 'Quick Links',
+          text: Strings.quickLinks.tr,
           style: CustomTextStyle.h4,
           fontSize: 20,
           fontWeight: FontWeight.w700,
@@ -257,19 +256,6 @@ class FooterView extends GetView<AppController> {
             () => controller.scrollToSection(3), textColorSecondary),
         _buildLinkItem(Strings.navContact.tr, Icons.email_outlined,
             () => controller.scrollToSection(4), textColorSecondary),
-
-        const SizedBox(height: AppSizes.xl),
-
-        // Social Blocks
-        Row(
-          children: [
-            _buildSocialBlock(Icons.code, isDark),
-            const SizedBox(width: AppSizes.md),
-            _buildSocialBlock(Icons.work_outline, isDark),
-            const SizedBox(width: AppSizes.md),
-            _buildSocialBlock(Icons.email_outlined, isDark),
-          ],
-        )
       ],
     );
   }
@@ -296,25 +282,6 @@ class FooterView extends GetView<AppController> {
     );
   }
 
-  Widget _buildSocialBlock(IconData icon, bool isDark) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF13132A) : AppColors.badgeBg,
-            borderRadius: BorderRadius.circular(AppSizes.radiusSm),
-            border: Border.all(
-              color: isDark ? AppColors.darkBorderLight : AppColors.borderLight,
-            )),
-        child: Icon(icon,
-            color: isDark ? AppColors.darkText : AppColors.textPrimary,
-            size: 20),
-      ),
-    );
-  }
-
   // ─── Right Column: Contact CTA ──────────────────────────────────────────
   Widget _buildRightColumn(
       Color textColorPrimary, Color textColorSecondary, bool isDark) {
@@ -325,14 +292,14 @@ class FooterView extends GetView<AppController> {
           text: TextSpan(
             children: [
               TextSpan(
-                text: "Let's build something\n",
+                text: Strings.footerBuildTogether1.tr,
                 style: AppTextStyles.h3.copyWith(
                     color: textColorPrimary,
                     fontSize: 24,
                     fontWeight: FontWeight.w700),
               ),
               TextSpan(
-                text: "together",
+                text: Strings.footerBuildTogether2.tr,
                 style: AppTextStyles.h3.copyWith(
                     color: AppColors.primary,
                     fontSize: 24,
@@ -343,8 +310,7 @@ class FooterView extends GetView<AppController> {
         ),
         const SizedBox(height: AppSizes.md),
         CustomText(
-          text:
-              "I'm open to freelance projects, full-time opportunities, and exciting collaborations.",
+          text: Strings.footerBuildTogetherDesc.tr,
           style: CustomTextStyle.bodyMedium,
           color: textColorSecondary,
           height: 1.6,
@@ -374,7 +340,7 @@ class FooterView extends GetView<AppController> {
                 const Icon(Icons.send_rounded, color: Colors.white, size: 18),
                 const SizedBox(width: AppSizes.sm),
                 CustomText(
-                  text: "${Strings.contact.tr} Me",
+                  text: Strings.contactMe.tr,
                   style: CustomTextStyle.button,
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -393,7 +359,7 @@ class FooterView extends GetView<AppController> {
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         CustomText(
-          text: "© 2026 Adel Jarour. All rights reserved.",
+          text: Strings.footerCopy.tr,
           style: CustomTextStyle.caption,
           color: textColorSecondary,
         ),
@@ -402,7 +368,7 @@ class FooterView extends GetView<AppController> {
             Icon(Icons.star, color: AppColors.primary, size: 14),
             const SizedBox(width: 8),
             CustomText(
-              text: "Built with Flutter • GetX • Responsive Design",
+              text: Strings.footerBuiltWith.tr,
               style: CustomTextStyle.caption,
               color: textColorSecondary,
             ),
@@ -410,13 +376,13 @@ class FooterView extends GetView<AppController> {
         ),
         Row(children: [
           CustomText(
-            text: "Designed & Coded with ",
+            text: Strings.footerDesignedCodedWith1.tr,
             style: CustomTextStyle.caption,
             color: textColorSecondary,
           ),
           const Icon(Icons.favorite, color: Colors.blue, size: 14),
           CustomText(
-            text: " in Flutter",
+            text: Strings.footerDesignedCodedWith2.tr,
             style: CustomTextStyle.caption,
             color: textColorSecondary,
           ),
@@ -435,7 +401,7 @@ class FooterView extends GetView<AppController> {
             Icon(Icons.star, color: AppColors.primary, size: 14),
             const SizedBox(width: 8),
             CustomText(
-              text: "Built with Flutter • GetX • Responsive Design",
+              text: Strings.footerBuiltWith.tr,
               style: CustomTextStyle.caption,
               color: textColorSecondary,
             ),
@@ -444,20 +410,20 @@ class FooterView extends GetView<AppController> {
         const SizedBox(height: AppSizes.lg),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           CustomText(
-            text: "Designed & Coded with ",
+            text: Strings.footerDesignedCodedWith1.tr,
             style: CustomTextStyle.caption,
             color: textColorSecondary,
           ),
           const Icon(Icons.favorite, color: Colors.blue, size: 14),
           CustomText(
-            text: " in Flutter",
+            text: Strings.footerDesignedCodedWith2.tr,
             style: CustomTextStyle.caption,
             color: textColorSecondary,
           ),
         ]),
         const SizedBox(height: AppSizes.lg),
         CustomText(
-          text: "© 2026 Adel Jarour. All rights reserved.",
+          text: Strings.footerCopy.tr,
           style: CustomTextStyle.caption,
           color: textColorSecondary,
           textAlign: TextAlign.center,

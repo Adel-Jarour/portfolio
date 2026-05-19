@@ -82,6 +82,19 @@ class Strings {
   static const String latestWork = 'latest_work';
   static const String contact = 'contact';
   static const String footerCopyright = 'footer_copyright';
+  static const String footerName = 'footer_name';
+  static const String footerTitle = 'footer_title';
+  static const String footerDesc = 'footer_desc';
+  static const String quickLinks = 'quick_links';
+  static const String footerBuildTogether1 = 'footer_build_together_1';
+  static const String footerBuildTogether2 = 'footer_build_together_2';
+  static const String footerBuildTogetherDesc = 'footer_build_together_desc';
+  static const String contactMe = 'contact_me';
+  static const String footerCopy = 'footer_copy';
+  static const String footerBuiltWith = 'footer_built_with';
+  static const String footerDesignedCodedWith1 = 'footer_designed_coded_with_1';
+  static const String footerDesignedCodedWith2 = 'footer_designed_coded_with_2';
+  static const String badgeResponsive = 'badge_responsive';
 
   // General
   static const String portfolio = 'portfolio';

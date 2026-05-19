@@ -8,6 +8,8 @@ class PortfolioInfoModel {
   final String email;
   final String github;
   final String linkedin;
+  final String location;
+  final String image;
 
   // New statistics fields
   final int clients;
@@ -21,6 +23,8 @@ class PortfolioInfoModel {
     required this.email,
     required this.github,
     required this.linkedin,
+    required this.location,
+    this.image = '',
     this.clients = 0,
     this.projects = 0,
     this.yearsExp = 0,
@@ -35,6 +39,8 @@ class PortfolioInfoModel {
       email: data['email'] as String? ?? '',
       github: data['github'] as String? ?? '',
       linkedin: data['linkedin'] as String? ?? '',
+      location: data['location'] as String? ?? '',
+      image: data['image'] as String? ?? '',
       clients: (data['clients'] as num?)?.toInt() ?? 0,
       projects: (data['projects'] as num?)?.toInt() ?? 0,
       yearsExp: (data['years_exp'] as num?)?.toInt() ?? 0,
@@ -49,6 +55,8 @@ class PortfolioInfoModel {
         email: '',
         github: '',
         linkedin: '',
+        location: '',
+        image: '',
         clients: 0,
         projects: 0,
         yearsExp: 0,

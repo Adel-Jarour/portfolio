@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:portfolio/core/constants/app_text_styles.dart';
+import 'package:portfolio/core/controllers/app_controller.dart';
 import 'package:portfolio/modules/home_section/controllers/hero_anim_controller.dart';
 import 'package:portfolio/widgets/animated_fade_slide.dart';
 import 'package:portfolio/widgets/custom_button.dart';
@@ -93,6 +94,7 @@ class HeroSection extends GetView<HeroAnimController> {
   }
 
   Widget _buildTextContent(bool isMobile, bool isDark) {
+    final AppController controller = Get.find();
     return Column(
       crossAxisAlignment:
           isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
@@ -173,13 +175,17 @@ class HeroSection extends GetView<HeroAnimController> {
             CustomButton(
               text: Strings.hireMe.tr,
               variant: CustomButtonVariant.filled,
-              onPressed: () {},
+              onPressed: () {
+                controller.scrollToSection(4);
+              },
             ),
             const SizedBox(width: AppSizes.md),
             CustomButton(
               text: Strings.viewPortfolio.tr,
               variant: CustomButtonVariant.outlined,
-              onPressed: () {},
+              onPressed: () {
+                controller.scrollToSection(3);
+              },
             ),
           ],
         ),
@@ -214,26 +220,106 @@ class HeroSection extends GetView<HeroAnimController> {
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(AppSizes.radiusXl),
-                child: Image.asset(
-                  'assets/images/profile_photo.png',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppSizes.sm + 4),
-              child: CustomText(
-                text: Strings.professionalProfile.tr,
-                style: CustomTextStyle.bodySmall,
-                color: AppColors.textPrimary.withValues(alpha: 0.6),
-                fontWeight: FontWeight.w500,
-                fontSize: 13,
+                child: Obx(() {
+                  final imageUrl = controller.portfolioInfo.value?.image;
+                  final isLoading = controller.isLoading.value;
+
+                  if (isLoading || imageUrl == null || imageUrl.isEmpty) {
+                    return const SkeletonLoader(
+                      width: double.infinity,
+                      height: double.infinity,
+                    );
+                  }
+
+                  return Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const SkeletonLoader(
+                        width: double.infinity,
+                        height: double.infinity,
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const SkeletonLoader(
+                        width: double.infinity,
+                        height: double.infinity,
+                      );
+                    },
+                  );
+                }),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class SkeletonLoader extends StatefulWidget {
+  final double width;
+  final double height;
+  final double borderRadius;
+
+  const SkeletonLoader({
+    super.key,
+    required this.width,
+    required this.height,
+    this.borderRadius = 16.0,
+  });
+
+  @override
+  State<SkeletonLoader> createState() => _SkeletonLoaderState();
+}
+
+class _SkeletonLoaderState extends State<SkeletonLoader>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: 0.3, end: 0.8).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor = isDark ? AppColors.darkBorder : AppColors.borderLight;
+
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Opacity(
+          opacity: _animation.value,
+          child: Container(
+            width: widget.width,
+            height: widget.height,
+            decoration: BoxDecoration(
+              color: baseColor,
+              borderRadius: BorderRadius.circular(widget.borderRadius),
+            ),
+          ),
+        );
+      },
     );
   }
 }

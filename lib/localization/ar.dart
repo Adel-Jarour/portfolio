@@ -11,11 +11,11 @@ const Map<String, String> ar = {
 
   // Home Section
   Strings.availableForProjects: 'متاح للمشاريع',
-  Strings.heroTitle1: 'صناعة ',
-  Strings.heroTitleHighlight: 'تجارب',
-  Strings.heroTitle2: '\nرقمية\nبدقة عالية',
+  Strings.heroTitle1: 'مطور ',
+  Strings.heroTitleHighlight: 'Flutter',
+  Strings.heroTitle2: '\nبرمجة سريعة\nتصميم أنيق',
   Strings.heroSubtitle:
-      'مطور متكامل ومصمم واجهات مستخدم متخصص في حلول الويب عالية الدقة التي تدفع نمو الأعمال وتفاعل المستخدمين.',
+      'أطور تطبيقات Flutter عالية الجودة لنظامي iOS و Android، من التصميم إلى الإنتاج.',
   Strings.viewPortfolio: 'عرض الأعمال',
   Strings.professionalProfile: 'الملف المهني',
 
@@ -92,6 +92,21 @@ const Map<String, String> ar = {
   Strings.latestWork: 'أحدث الأعمال',
   Strings.contact: 'اتصل بنا',
   Strings.footerCopyright: '© 2024 بورتفوليو. صُنع بدقة وشغف.',
+  Strings.footerName: 'عادل جرور',
+  Strings.footerTitle: 'مطور فلاتر',
+  Strings.footerDesc:
+      'بناء تطبيقات هاتف وويب متجاوبة، عالية الأداء وقابلة للتطوير باستخدام Flutter.',
+  Strings.quickLinks: 'روابط سريعة',
+  Strings.footerBuildTogether1: 'دعنا نبني شيئًا\n',
+  Strings.footerBuildTogether2: 'معًا',
+  Strings.footerBuildTogetherDesc:
+      'أنا منفتح على المشاريع المستقلة، وفرص العمل الكاملة، والتعاون المثمر.',
+  Strings.contactMe: 'تواصل معي',
+  Strings.footerCopy: '© 2026 عادل جرور. جميع الحقوق محفوظة.',
+  Strings.footerBuiltWith: 'صُنع باستخدام Flutter • GetX • تصميم متجاوب',
+  Strings.footerDesignedCodedWith1: 'صُمم وبُرمج بـ ',
+  Strings.footerDesignedCodedWith2: ' في فلاتر',
+  Strings.badgeResponsive: 'تصميم متجاوب',
 
   // General
   Strings.portfolio: 'بورتفوليو',
