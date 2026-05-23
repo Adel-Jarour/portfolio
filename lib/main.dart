@@ -43,17 +43,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Portfolio',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.light,
-      translations: AppTranslations(),
-      locale: const Locale('en', 'US'),
-      fallbackLocale: const Locale('en', 'US'),
-      initialRoute: AppRoutes.home,
-      getPages: AppPages.pages,
-    );
+    // ✅ FIX: Wrap GetMaterialApp in Obx to reactively update theme
+    return Obx(() {
+      final appController = Get.find<AppController>();
+      
+      return GetMaterialApp(
+        title: 'Portfolio',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        // ✅ FIX: Sync themeMode with GetX reactive state instead of hardcoded light
+        themeMode: appController.isDarkMode.value 
+            ? ThemeMode.dark 
+            : ThemeMode.light,
+        translations: AppTranslations(),
+        locale: const Locale('en', 'US'),
+        fallbackLocale: const Locale('en', 'US'),
+        initialRoute: AppRoutes.home,
+        getPages: AppPages.pages,
+      );
+    });
   }
 }
