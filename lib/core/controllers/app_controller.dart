@@ -49,9 +49,8 @@ class AppController extends GetxController {
 
   void toggleTheme() {
     isDarkMode.value = !isDarkMode.value;
-    Get.changeThemeMode(
-      isDarkMode.value ? ThemeMode.dark : ThemeMode.light,
-    );
+    // ✅ REMOVED Get.changeThemeMode() - MyApp's Obx handles theme sync automatically
+    // This prevents duplicate theme change calls and eliminates the freeze
   }
 
   void scrollToSection(int index) {
