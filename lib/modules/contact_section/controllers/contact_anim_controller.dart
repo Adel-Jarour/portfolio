@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/data/models/portfolio_info_model.dart';
@@ -61,7 +60,8 @@ class ContactAnimController extends GetxController
 
         // Map your form fields to the template variables
         final templateParams = {
-          'user_name': name, // Must match variable names in your EmailJS template
+          'user_name':
+              name, // Must match variable names in your EmailJS template
           'user_email': email,
           'user_subject': subject,
           'user_message': message,
@@ -85,7 +85,6 @@ class ContactAnimController extends GetxController
         messageController.clear();
 
         // Show success message to user
-        print('Email sent successfully!');
         Get.snackbar(
           'Success',
           Strings.emailSendSuccess.tr,
@@ -95,7 +94,6 @@ class ContactAnimController extends GetxController
           duration: const Duration(seconds: 4),
         );
       } catch (error) {
-        print('Failed to send email: $error');
         Get.snackbar(
           'Error',
           '${Strings.emailSendFailure.tr} ($error)',
