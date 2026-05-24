@@ -48,7 +48,6 @@ class Strings {
   // Projects Section
   static const String selectedWorks = 'selected_works';
   static const String selectedWorksSubtitle = 'selected_works_subtitle';
-  static const String viewArchive = 'view_archive';
   static const String project1Category = 'project1_category';
   static const String project1Year = 'project1_year';
   static const String project1Title = 'project1_title';

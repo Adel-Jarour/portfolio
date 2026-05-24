@@ -57,7 +57,6 @@ const Map<String, String> en = {
   Strings.selectedWorks: 'Selected Works',
   Strings.selectedWorksSubtitle:
       'A collection of projects that demonstrate my skills.',
-  Strings.viewArchive: 'View Archive',
   Strings.project1Category: 'FINTECH',
   Strings.project1Year: '2023',
   Strings.project1Title: 'Vault Analytics Platform',

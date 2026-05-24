@@ -6,6 +6,7 @@ class ProjectModel {
   final String description;
   final String status;
   final String? code; // GitHub / live URL
+  final String? image;
 
   const ProjectModel({
     required this.id,
@@ -13,6 +14,7 @@ class ProjectModel {
     required this.description,
     required this.status,
     this.code,
+    this.image,
   });
 
   factory ProjectModel.fromFirestore(DocumentSnapshot doc) {
@@ -23,6 +25,7 @@ class ProjectModel {
       description: data['description'] as String? ?? '',
       status: data['status'] as String? ?? '',
       code: data['code'] as String?,
+      image: data['image'] as String?,
     );
   }
 }

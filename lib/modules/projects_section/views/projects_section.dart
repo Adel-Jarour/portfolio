@@ -20,6 +20,15 @@ class ProjectsSection extends GetView<ProjectsController> {
     final isTablet = screenWidth <= AppSizes.tabletBreakpoint && !isMobile;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
+    final double horizontalPadding = isMobile
+        ? AppSizes.pagePaddingMobile
+        : isTablet
+            ? AppSizes.pagePaddingTablet
+            : AppSizes.pagePaddingDesktop;
+
+    final double viewportWidth = (screenWidth - 2 * horizontalPadding)
+        .clamp(0.0, AppSizes.maxContentWidth);
+
     return VisibilityDetector(
       key: const Key('projects-section'),
       onVisibilityChanged: controller.onVisibility,
@@ -46,23 +55,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                 AnimatedFadeSlide(
                   animation: controller.headerCtrl,
                   beginOffset: const Offset(0, 0.08),
-                  child: isMobile
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildHeaderTitles(isDark),
-                            const SizedBox(height: AppSizes.lg),
-                            _buildViewArchiveBtn(),
-                          ],
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            _buildHeaderTitles(isDark),
-                            _buildViewArchiveBtn(),
-                          ],
-                        ),
+                  child: _buildHeaderTitles(isDark),
                 ),
 
                 const SizedBox(height: AppSizes.xxl),
@@ -99,35 +92,75 @@ class ProjectsSection extends GetView<ProjectsController> {
                         description: projects[i].description,
                         technologies: const [],
                         codeUrl: projects[i].code,
+                        image: projects[i].image,
                         isDark: isDark,
                       ),
                     ),
                   );
 
-                  if (isMobile || isTablet) {
-                    return Column(
-                      children: List.generate(
-                        cards.length,
-                        (i) => Padding(
-                          padding: EdgeInsets.only(
-                              bottom: i < cards.length - 1 ? AppSizes.xl : 0),
-                          child: cards[i],
-                        ),
-                      ),
-                    );
-                  }
+                  final visibleCount = isMobile ? 1 : (isTablet ? 2 : 3);
+                  final double gap = isMobile ? 16.0 : (isTablet ? 20.0 : 24.0);
 
-                  return Row(
-                    children: List.generate(
-                      cards.length,
-                      (i) => Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              right: i < cards.length - 1 ? AppSizes.xxl : 0),
-                          child: cards[i],
+                  final double cardWidth =
+                      (viewportWidth - (visibleCount - 1) * gap) / visibleCount;
+                  final int maxIndex = projects.length - visibleCount;
+
+                  final bool showBackBtn = controller.currentIndex.value > 0;
+                  final bool showNextBtn =
+                      controller.currentIndex.value < maxIndex;
+
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      SingleChildScrollView(
+                        controller: controller.scrollController,
+                        scrollDirection: Axis.horizontal,
+                        clipBehavior: Clip.none,
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        physics: const BouncingScrollPhysics(),
+                        child: Row(
+                          children: [
+                            for (int i = 0; i < cards.length; i++) ...[
+                              if (i > 0) SizedBox(width: gap),
+                              SizedBox(
+                                width: cardWidth,
+                                child: cards[i],
+                              ),
+                            ],
+                          ],
                         ),
                       ),
-                    ),
+                      // Back button (shown on any screen size if we are not at the first item)
+                      if (maxIndex > 0 && showBackBtn)
+                        Positioned(
+                          left: -12,
+                          top: 0,
+                          bottom: 0,
+                          child: Center(
+                            child: _buildNavigationButton(
+                              icon: Icons.chevron_left_rounded,
+                              onPressed: () =>
+                                  controller.scrollBack(cardWidth + gap),
+                              isDark: isDark,
+                            ),
+                          ),
+                        ),
+                      // Next button (shown on any screen size if we are not at the last item)
+                      if (maxIndex > 0 && showNextBtn)
+                        Positioned(
+                          right: -12,
+                          top: 0,
+                          bottom: 0,
+                          child: Center(
+                            child: _buildNavigationButton(
+                              icon: Icons.chevron_right_rounded,
+                              onPressed: () => controller.scrollNext(
+                                  cardWidth + gap, maxIndex),
+                              isDark: isDark,
+                            ),
+                          ),
+                        ),
+                    ],
                   );
                 }),
               ],
@@ -154,28 +187,6 @@ class ProjectsSection extends GetView<ProjectsController> {
           color: isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
         ),
       ],
-    );
-  }
-
-  Widget _buildViewArchiveBtn() {
-    return InkWell(
-      onTap: () {},
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CustomText(
-            text: Strings.viewArchive.tr,
-            style: CustomTextStyle.button,
-            color: AppColors.primary,
-          ),
-          const SizedBox(width: AppSizes.sm),
-          const Icon(
-            Icons.arrow_forward_rounded,
-            color: AppColors.primary,
-            size: 18,
-          ),
-        ],
-      ),
     );
   }
 
@@ -215,12 +226,47 @@ class ProjectsSection extends GetView<ProjectsController> {
           CustomText(
             text: 'Could not load projects. Check your connection.',
             style: CustomTextStyle.bodyMedium,
-            color: isDark
-                ? AppColors.darkTextSecondary
-                : AppColors.textSecondary,
+            color:
+                isDark ? AppColors.darkTextSecondary : AppColors.textSecondary,
             textAlign: TextAlign.center,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNavigationButton({
+    required IconData icon,
+    required VoidCallback onPressed,
+    required bool isDark,
+  }) {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.primary,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: isDark ? 0.4 : 0.25),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          customBorder: const CircleBorder(),
+          child: Center(
+            child: Icon(
+              icon,
+              color: Colors.white,
+              size: 28,
+            ),
+          ),
+        ),
       ),
     );
   }

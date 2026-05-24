@@ -11,6 +11,7 @@ class ProjectCard extends StatefulWidget {
   final String description;
   final List<String> technologies;
   final String? codeUrl;
+  final String? image;
   final bool isDark;
 
   const ProjectCard({
@@ -21,6 +22,7 @@ class ProjectCard extends StatefulWidget {
     required this.description,
     required this.technologies,
     this.codeUrl,
+    this.image,
     this.isDark = false,
   });
 
@@ -46,10 +48,13 @@ class _ProjectCardState extends State<ProjectCard> {
     final isDark = widget.isDark;
     final hasLink = widget.codeUrl?.isNotEmpty == true;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
+    return GestureDetector(
+      onTap: hasLink ? _launchUrl : null,
+      child: MouseRegion(
+        cursor: hasLink ? SystemMouseCursors.click : MouseCursor.defer,
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
         transform: Matrix4.identity()..scale(_isHovered ? 1.02 : 1.0),
@@ -76,20 +81,36 @@ class _ProjectCardState extends State<ProjectCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image placeholder
+            // Project Image
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(AppSizes.radiusXl),
               ),
-              child: Container(
+              child: SizedBox(
                 height: 240,
                 width: double.infinity,
-                color: isDark ? AppColors.darkHero : AppColors.heroBackground,
-                child: Icon(
-                  Icons.image_outlined,
-                  size: 48,
-                  color: isDark ? AppColors.darkBorder : AppColors.border,
-                ),
+                child: (widget.image == null || widget.image!.isEmpty)
+                    ? _buildPlaceholder(isDark)
+                    : Image.network(
+                        widget.image!,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                              strokeWidth: 2,
+                              color: AppColors.primary,
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return _buildPlaceholder(isDark);
+                        },
+                      ),
               ),
             ),
             Padding(
@@ -179,8 +200,9 @@ class _ProjectCardState extends State<ProjectCard> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildBadge(String text,
       {required bool outline, required bool isDark}) {
@@ -207,6 +229,17 @@ class _ProjectCardState extends State<ProjectCard> {
             : (isDark ? AppColors.darkBadgeText : AppColors.badgeText),
         fontWeight: FontWeight.w600,
         fontSize: 11,
+      ),
+    );
+  }
+
+  Widget _buildPlaceholder(bool isDark) {
+    return Container(
+      color: isDark ? AppColors.darkHero : AppColors.heroBackground,
+      child: Icon(
+        Icons.image_outlined,
+        size: 48,
+        color: isDark ? AppColors.darkBorder : AppColors.border,
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/data/models/project_model.dart';
 import 'package:portfolio/data/repositories/portfolio_repository.dart';
+import 'package:portfolio/core/constants/app_sizes.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ProjectsController extends GetxController
@@ -12,6 +13,34 @@ class ProjectsController extends GetxController
   late AnimationController card1Ctrl;
   late AnimationController card2Ctrl;
   bool _animated = false;
+
+  final scrollController = ScrollController();
+  final currentIndex = 0.obs;
+  bool _isAnimating = false;
+
+  void scrollNext(double itemStep, int maxIndex) {
+    if (currentIndex.value < maxIndex && !_isAnimating) {
+      _isAnimating = true;
+      currentIndex.value++;
+      scrollController.animateTo(
+        currentIndex.value * itemStep,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      ).then((_) => _isAnimating = false);
+    }
+  }
+
+  void scrollBack(double itemStep) {
+    if (currentIndex.value > 0 && !_isAnimating) {
+      _isAnimating = true;
+      currentIndex.value--;
+      scrollController.animateTo(
+        currentIndex.value * itemStep,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      ).then((_) => _isAnimating = false);
+    }
+  }
 
   void onVisibility(VisibilityInfo info) {
     if (!_animated && info.visibleFraction > 0.1) {
@@ -49,6 +78,31 @@ class ProjectsController extends GetxController
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
+    
+    scrollController.addListener(() {
+      if (!scrollController.hasClients) return;
+      if (_isAnimating) return;
+
+      final screenWidth = Get.width;
+      final isMobile = screenWidth <= AppSizes.mobileBreakpoint;
+      final isTablet = screenWidth <= AppSizes.tabletBreakpoint && !isMobile;
+      
+      final visibleCount = isMobile ? 1 : (isTablet ? 2 : 3);
+      final gap = isMobile ? 16.0 : (isTablet ? 20.0 : 24.0);
+      final viewportWidth = scrollController.position.viewportDimension;
+      final cardWidth = (viewportWidth - (visibleCount - 1) * gap) / visibleCount;
+      final itemStep = cardWidth + gap;
+      
+      final maxIndex = projects.length - visibleCount;
+      if (maxIndex <= 0) return;
+      
+      final offset = scrollController.offset;
+      final newIndex = (offset / itemStep).round().clamp(0, maxIndex);
+      if (currentIndex.value != newIndex) {
+        currentIndex.value = newIndex;
+      }
+    });
+
     _subscribe();
   }
 
@@ -72,6 +126,7 @@ class ProjectsController extends GetxController
     headerCtrl.dispose();
     card1Ctrl.dispose();
     card2Ctrl.dispose();
+    scrollController.dispose();
     super.onClose();
   }
 }

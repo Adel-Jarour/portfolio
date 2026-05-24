@@ -55,7 +55,6 @@ const Map<String, String> ar = {
   // Projects Section
   Strings.selectedWorks: 'الأعمال المختارة',
   Strings.selectedWorksSubtitle: 'مجموعة من المشاريع التي تبرز مهاراتي.',
-  Strings.viewArchive: 'عرض الأرشيف',
   Strings.project1Category: 'التكنولوجيا المالية',
   Strings.project1Year: '2023',
   Strings.project1Title: 'منصة تحليلات الخزنة',
