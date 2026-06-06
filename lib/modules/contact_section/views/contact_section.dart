@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:portfolio/core/constants/app_colors.dart';
 import 'package:portfolio/core/constants/app_sizes.dart';
@@ -200,45 +201,72 @@ class ContactSection extends GetView<ContactAnimController> {
     required String value,
     required bool isDark,
   }) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: AppColors.primaryLight,
-            borderRadius: BorderRadius.circular(AppSizes.radiusMd),
-          ),
-          child: Icon(
-            icon,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(width: AppSizes.lg),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+    final isEmail = icon == Icons.email_outlined;
+    return GestureDetector(
+      onTap: isEmail
+          ? () {
+              Clipboard.setData(ClipboardData(text: value));
+              Get.snackbar(
+                'Copied to Clipboard!',
+                value,
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: isDark
+                    ? AppColors.darkCard.withValues(alpha: 0.95)
+                    : Colors.white.withValues(alpha: 0.95),
+                colorText: isDark ? AppColors.darkText : Colors.black,
+                icon: const Icon(Icons.copy_rounded, color: AppColors.primary),
+                margin: const EdgeInsets.all(16),
+                duration: const Duration(seconds: 2),
+                borderColor: isDark ? AppColors.darkBorder : AppColors.borderLight,
+                borderWidth: 1,
+              );
+            }
+          : null,
+      child: MouseRegion(
+        cursor: isEmail ? SystemMouseCursors.click : MouseCursor.defer,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomText(
-              text: label,
-              style: CustomTextStyle.caption,
-              color: isDark
-                  ? AppColors.darkTextSecondary
-                  : AppColors.textSecondary,
-              letterSpacing: 1.2,
-              fontWeight: FontWeight.bold,
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.primaryLight,
+                borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+              ),
+              child: Icon(
+                icon,
+                color: Colors.white,
+              ),
             ),
-            const SizedBox(height: 4),
-            CustomText(
-              text: value,
-              style: CustomTextStyle.bodyLarge,
-              fontWeight: FontWeight.w700,
-              color: isDark ? AppColors.darkText : null,
+            const SizedBox(width: AppSizes.lg),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomText(
+                  text: label,
+                  style: CustomTextStyle.caption,
+                  color: isDark
+                      ? AppColors.darkTextSecondary
+                      : AppColors.textSecondary,
+                  letterSpacing: 1.2,
+                  fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(height: 4),
+                SelectionArea(
+                  child: CustomText(
+                    text: value,
+                    style: CustomTextStyle.bodyLarge,
+                    fontWeight: FontWeight.w700,
+                    color: isDark ? AppColors.darkText : null,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 

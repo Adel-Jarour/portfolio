@@ -13,6 +13,12 @@ class ProjectsSection extends GetView<ProjectsController> {
   final Key? sectionKey;
   const ProjectsSection({super.key, this.sectionKey});
 
+  /// How much of the next (peeking) card is visible, as a fraction of card width.
+  static const double _peekFraction = 0.15;
+
+  /// Scale of a card that is only peeking at the edge.
+  static const double _peekScale = 0.92;
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -77,33 +83,27 @@ class ProjectsSection extends GetView<ProjectsController> {
                     controller.card2Ctrl,
                   ];
 
-                  final cards = List.generate(
-                    projects.length,
-                    (i) => AnimatedFadeSlide(
-                      animation: i < animations.length
-                          ? animations[i]
-                          : animations.last,
-                      beginOffset: const Offset(0, 0.12),
-                      child: ProjectCard(
-                        key: ValueKey(projects[i].id),
-                        title: projects[i].name,
-                        category: projects[i].status,
-                        year: '',
-                        description: projects[i].description,
-                        technologies: const [],
-                        codeUrl: projects[i].code,
-                        image: projects[i].image,
-                        isDark: isDark,
-                      ),
-                    ),
-                  );
+                  // Number of fully-visible cards (not counting the peek).
+                  final int fullVisible = isMobile ? 1 : 2;
+                  final double gap =
+                      isMobile ? 16.0 : (isTablet ? 20.0 : 24.0);
 
-                  final visibleCount = isMobile ? 1 : (isTablet ? 2 : 3);
-                  final double gap = isMobile ? 16.0 : (isTablet ? 20.0 : 24.0);
-
+                  // Card width: the viewport must fit `fullVisible` cards +
+                  // gaps between them + a peek portion of the next card.
+                  // viewportWidth = fullVisible * cardWidth
+                  //               + (fullVisible - 1) * gap
+                  //               + gap              (gap before peek card)
+                  //               + peekFraction * cardWidth
+                  //
+                  // => cardWidth = (viewportWidth - fullVisible * gap)
+                  //              / (fullVisible + peekFraction)
                   final double cardWidth =
-                      (viewportWidth - (visibleCount - 1) * gap) / visibleCount;
-                  final int maxIndex = projects.length - visibleCount;
+                      (viewportWidth - fullVisible * gap) /
+                          (fullVisible + _peekFraction);
+
+                  final double itemStep = cardWidth + gap;
+                  final int maxIndex =
+                      (projects.length - fullVisible).clamp(0, projects.length);
 
                   final bool showBackBtn = controller.currentIndex.value > 0;
                   final bool showNextBtn =
@@ -112,25 +112,54 @@ class ProjectsSection extends GetView<ProjectsController> {
                   return Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      SingleChildScrollView(
-                        controller: controller.scrollController,
-                        scrollDirection: Axis.horizontal,
-                        clipBehavior: Clip.none,
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        physics: const BouncingScrollPhysics(),
-                        child: Row(
-                          children: [
-                            for (int i = 0; i < cards.length; i++) ...[
-                              if (i > 0) SizedBox(width: gap),
-                              SizedBox(
-                                width: cardWidth,
-                                child: cards[i],
-                              ),
-                            ],
-                          ],
+                      // ── Scrollable card strip ───────────────────────────
+                      NotificationListener<ScrollNotification>(
+                        onNotification: (notification) {
+                          // Trigger rebuild so AnimatedBuilder below picks up
+                          // the new scroll offset.
+                          if (notification is ScrollUpdateNotification) {
+                            controller.scrollNotifier.value =
+                                controller.scrollController.offset;
+                          }
+                          return false;
+                        },
+                        child: SingleChildScrollView(
+                          controller: controller.scrollController,
+                          scrollDirection: Axis.horizontal,
+                          clipBehavior: Clip.none,
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          physics: const BouncingScrollPhysics(),
+                          child: ValueListenableBuilder<double>(
+                            valueListenable: controller.scrollNotifier,
+                            builder: (context, scrollOffset, _) {
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  for (int i = 0;
+                                      i < projects.length;
+                                      i++) ...[
+                                    if (i > 0) SizedBox(width: gap),
+                                    _buildScaledCard(
+                                      index: i,
+                                      cardWidth: cardWidth,
+                                      itemStep: itemStep,
+                                      scrollOffset: scrollOffset,
+                                      fullVisible: fullVisible,
+                                      animation: i < animations.length
+                                          ? animations[i]
+                                          : animations.last,
+                                      project: projects[i],
+                                      isDark: isDark,
+                                    ),
+                                  ],
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ),
-                      // Back button (shown on any screen size if we are not at the first item)
+
+                      // ── Back button ─────────────────────────────────────
                       if (maxIndex > 0 && showBackBtn)
                         Positioned(
                           left: -12,
@@ -140,12 +169,13 @@ class ProjectsSection extends GetView<ProjectsController> {
                             child: _buildNavigationButton(
                               icon: Icons.chevron_left_rounded,
                               onPressed: () =>
-                                  controller.scrollBack(cardWidth + gap),
+                                  controller.scrollBack(itemStep),
                               isDark: isDark,
                             ),
                           ),
                         ),
-                      // Next button (shown on any screen size if we are not at the last item)
+
+                      // ── Next button ─────────────────────────────────────
                       if (maxIndex > 0 && showNextBtn)
                         Positioned(
                           right: -12,
@@ -154,8 +184,8 @@ class ProjectsSection extends GetView<ProjectsController> {
                           child: Center(
                             child: _buildNavigationButton(
                               icon: Icons.chevron_right_rounded,
-                              onPressed: () => controller.scrollNext(
-                                  cardWidth + gap, maxIndex),
+                              onPressed: () =>
+                                  controller.scrollNext(itemStep, maxIndex),
                               isDark: isDark,
                             ),
                           ),
@@ -170,6 +200,73 @@ class ProjectsSection extends GetView<ProjectsController> {
       ),
     );
   }
+
+  // ── Scaled card builder ────────────────────────────────────────────────────
+
+  Widget _buildScaledCard({
+    required int index,
+    required double cardWidth,
+    required double itemStep,
+    required double scrollOffset,
+    required int fullVisible,
+    required AnimationController animation,
+    required dynamic project,
+    required bool isDark,
+  }) {
+    // Position of this card's left edge relative to the scroll offset.
+    final double cardStart = index * itemStep;
+
+    // How far past the last fully-visible slot is this card?
+    // visibleEnd = scrollOffset + fullVisible * itemStep
+    final double visibleEnd = scrollOffset + fullVisible * itemStep;
+
+    // A card is "fully in view" when its left edge < visibleEnd - itemStep
+    // (i.e. it's within the first `fullVisible` slots from scroll position).
+    // We calculate a 0→1 "overflow" ratio for the peek effect:
+    //   0 = fully in view, 1 = completely past the visible region.
+    double overflow = 0.0;
+    if (cardStart >= visibleEnd - itemStep) {
+      // Card is in the peek zone or beyond
+      overflow =
+          ((cardStart - (visibleEnd - itemStep)) / itemStep).clamp(0.0, 1.0);
+    }
+    // Also handle cards that have scrolled off to the left
+    if (cardStart < scrollOffset - itemStep * 0.1) {
+      final double leftOverflow =
+          ((scrollOffset - cardStart) / itemStep).clamp(0.0, 1.0);
+      overflow = leftOverflow;
+    }
+
+    final double scale =
+        1.0 - overflow * (1.0 - _peekScale); // 1.0 → _peekScale
+
+    return SizedBox(
+      width: cardWidth,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+        transformAlignment: Alignment.center,
+        transform: Matrix4.identity()..scale(scale),
+        child: AnimatedFadeSlide(
+          animation: animation,
+          beginOffset: const Offset(0, 0.12),
+          child: ProjectCard(
+            key: ValueKey(project.id),
+            title: project.name,
+            category: project.status,
+            year: '',
+            description: project.description,
+            technologies: const [],
+            codeUrl: project.code,
+            image: project.image,
+            isDark: isDark,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── Header ─────────────────────────────────────────────────────────────────
 
   Widget _buildHeaderTitles(bool isDark) {
     return Column(
@@ -189,6 +286,8 @@ class ProjectsSection extends GetView<ProjectsController> {
       ],
     );
   }
+
+  // ── Skeleton ───────────────────────────────────────────────────────────────
 
   Widget _buildSkeleton(bool stacked, bool isDark) {
     final box = Container(
@@ -212,6 +311,8 @@ class ProjectsSection extends GetView<ProjectsController> {
     ]);
   }
 
+  // ── Error ──────────────────────────────────────────────────────────────────
+
   Widget _buildError(bool isDark) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 48),
@@ -234,6 +335,8 @@ class ProjectsSection extends GetView<ProjectsController> {
       ),
     );
   }
+
+  // ── Navigation button ──────────────────────────────────────────────────────
 
   Widget _buildNavigationButton({
     required IconData icon,

@@ -16,6 +16,7 @@ class ProjectsController extends GetxController
 
   final scrollController = ScrollController();
   final currentIndex = 0.obs;
+  final scrollNotifier = ValueNotifier<double>(0.0);
   bool _isAnimating = false;
 
   void scrollNext(double itemStep, int maxIndex) {
@@ -87,13 +88,14 @@ class ProjectsController extends GetxController
       final isMobile = screenWidth <= AppSizes.mobileBreakpoint;
       final isTablet = screenWidth <= AppSizes.tabletBreakpoint && !isMobile;
       
-      final visibleCount = isMobile ? 1 : (isTablet ? 2 : 3);
+      final fullVisible = isMobile ? 1 : 2;
       final gap = isMobile ? 16.0 : (isTablet ? 20.0 : 24.0);
+      const peekFraction = 0.15;
       final viewportWidth = scrollController.position.viewportDimension;
-      final cardWidth = (viewportWidth - (visibleCount - 1) * gap) / visibleCount;
+      final cardWidth = (viewportWidth - fullVisible * gap) / (fullVisible + peekFraction);
       final itemStep = cardWidth + gap;
       
-      final maxIndex = projects.length - visibleCount;
+      final maxIndex = projects.length - fullVisible;
       if (maxIndex <= 0) return;
       
       final offset = scrollController.offset;
@@ -126,6 +128,7 @@ class ProjectsController extends GetxController
     headerCtrl.dispose();
     card1Ctrl.dispose();
     card2Ctrl.dispose();
+    scrollNotifier.dispose();
     scrollController.dispose();
     super.onClose();
   }
