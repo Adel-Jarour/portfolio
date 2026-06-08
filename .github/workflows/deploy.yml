@@ -20,13 +20,10 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: '3.19.6'  # Known stable version
+          flutter-version: '3.27.2'  # Matches your local version
 
       - name: Enable Flutter web
         run: flutter config --enable-web
-
-      - name: Clean previous builds
-        run: flutter clean
 
       - name: Get dependencies
         run: flutter pub get
@@ -34,8 +31,7 @@ jobs:
       - name: Build web app
         run: flutter build web --release --base-href "/portfolio/"
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
 
