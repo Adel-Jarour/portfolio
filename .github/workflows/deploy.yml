@@ -2,7 +2,8 @@ name: Deploy Flutter Web
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -12,17 +13,29 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: '3.19.6'  # Known stable version
 
-      - run: flutter pub get
-      - run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+      - name: Enable Flutter web
+        run: flutter config --enable-web
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Clean previous builds
+        run: flutter clean
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build web app
+        run: flutter build web --release --base-href "/portfolio/"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
 
