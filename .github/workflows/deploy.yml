@@ -20,7 +20,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: '3.27.2'  # Matches your local version
+          flutter-version: '3.27.2'
 
       - name: Enable Flutter web
         run: flutter config --enable-web
@@ -29,7 +29,7 @@ jobs:
         run: flutter pub get
 
       - name: Build web app
-        run: flutter build web --release --base-href "/portfolio/"
+        run: flutter build web --release --web-renderer canvaskit --base-href="/portfolio/"
 
       - uses: actions/upload-pages-artifact@v3
         with:
